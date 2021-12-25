@@ -13,7 +13,7 @@ jobs:
       - checkout
       - run: docker build -t invectys/$CIRCLE_BRANCH .
       - run: echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
-      - run: docker push company/app:$CIRCLE_BRANCH
+      - run: docker push invectys/$CIRCLE_BRANCH
 
          
 
