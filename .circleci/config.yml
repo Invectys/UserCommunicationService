@@ -11,6 +11,7 @@ jobs:
     steps: 
       - checkout
       - run:
+          working_directory: .
           name: build
           command: |
             pwd
