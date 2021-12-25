@@ -10,12 +10,7 @@ jobs:
     machine: true
     steps: 
       - checkout
-      - run:
-          working_directory: .
-          name: build
-          command: |
-            pwd
-            docker build -t invectys/$CIRCLE_BRANCH $CIRCLE_WORKING_DIRECTORY
+      - run: docker build -t invectys/$CIRCLE_BRANCH .
 
          
 
