@@ -11,7 +11,7 @@ jobs:
     #resource_class: small
     steps: 
       - checkout
-      - run: docker build -t invectys/$CIRCLE_BRANCH .
+      - run: sudo docker build -t invectys/$CIRCLE_BRANCH .
       - run: echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
       - run: docker push invectys/$CIRCLE_BRANCH
 
