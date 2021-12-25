@@ -14,6 +14,7 @@ jobs:
           working_directory: ~/project
           name: Run tests
           command: |
+            pwd
             docker build -t invectys/$CIRCLE_BRANCH .
 
          
