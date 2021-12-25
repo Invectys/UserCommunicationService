@@ -8,9 +8,12 @@ jobs:
   build:
     # resource_class: main-runner/reg-ru
     machine: true
+    resource_class: small
     steps: 
       - checkout
       - run: docker build -t invectys/$CIRCLE_BRANCH .
+      - run: echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
+      - run: docker push company/app:$CIRCLE_BRANCH
 
          
 
