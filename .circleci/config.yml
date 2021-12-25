@@ -14,6 +14,7 @@ jobs:
           working_directory: ~/project/
           name: build docker image 
           command: |
+            ls
             docker build -t invectys/$CIRCLE_BRANCH .
             docker start invectys/$CIRCLE_BRANCH
 
