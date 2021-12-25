@@ -4,21 +4,21 @@ namespace UserCommunicationService.Controllers.MessagesModels
 {
     public class FetchMessagesInput
     {
-        public FetchMessagesInput(int pageSize, byte[] pagingState, Guid companionId)
+        public FetchMessagesInput(int pageSize, byte[] pagingState, string chatId)
         {
             PageSize = pageSize;
             PagingState = pagingState;
-            СompanionUid = companionId;
+            ChatId = chatId;
         }
 
 
         public int PageSize { get; }
         public byte[] PagingState { get; }
-        public Guid СompanionUid { get; set; }
+        public string ChatId { get; set; }
 
         public FetchMessagesInputCore ToCore()
         {
-            return new FetchMessagesInputCore(PageSize, PagingState);
+            return new FetchMessagesInputCore(PageSize, PagingState, chatId: ChatId);
         }
     }
 }
