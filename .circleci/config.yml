@@ -11,11 +11,10 @@ jobs:
     steps: 
       - checkout
       - run:
-          working_directory: $CIRCLE_WORKING_DIRECTORY
-          name: Run tests
+          name: build
           command: |
             pwd
-            docker build -t invectys/$CIRCLE_BRANCH .
+            docker build -t invectys/$CIRCLE_BRANCH $CIRCLE_WORKING_DIRECTORY
 
          
 
