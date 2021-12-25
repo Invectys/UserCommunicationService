@@ -6,7 +6,7 @@ version: 2.1
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
   build:
-    resource_class: main-runner
+    resource_class: small
     docker:
       - image: mcr.microsoft.com/dotnet/sdk:6.0
     steps: 
@@ -14,6 +14,7 @@ jobs:
           working_directory: ~/project/
           name: build
           command: |
+            pwd
             dotnet build
   # Below is the definition of your job to build and test your app, you can rename and customize it as you want.
   build-and-test:
