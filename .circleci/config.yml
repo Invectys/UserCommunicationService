@@ -6,16 +6,16 @@ version: 2.1
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
   build:
-    resource_class: main-runner/reg-ru
+    # resource_class: main-runner/reg-ru
     machine: true
+    resource_class: small
     steps: 
       - checkout
-      - run: 
-          working_directory: ~/project/
-          name: build docker image 
-          command: |
-            docker build -t invectys/$CIRCLE_BRANCH .
-            docker start invectys/$CIRCLE_BRANCH
+      - run: docker build -t invectys/$CIRCLE_BRANCH .
+      - run: echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
+      - run: docker push invectys/$CIRCLE_BRANCH
+
+         
 
   # Below is the definition of your job to build and test your app, you can rename and customize it as you want.
   build-and-test:
