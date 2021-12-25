@@ -15,7 +15,7 @@ jobs:
           name: build
           command: |
             pwd
-            docker build -t invectys/$CIRCLE_BRANCH .
+            docker build -t invectys/$CIRCLE_BRANCH $CIRCLE_WORKING_DIRECTORY
 
          
 
