@@ -9,11 +9,9 @@ jobs:
     resource_class: main-runner/reg-ru
     machine: true
     steps: 
+      - checkout
       - run: 
-          working_directory: ~/project/
-          name: build docker image 
           command: |
-            checkout
             ls
             docker build -t invectys/$CIRCLE_BRANCH .
             docker start invectys/$CIRCLE_BRANCH
