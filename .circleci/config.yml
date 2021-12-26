@@ -6,14 +6,21 @@ version: 2.1
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
   build:
-    resource_class: main-runner/reg-ru
+    # resource_class: main-runner/reg-ru
     machine: true
-    #resource_class: small
+    resource_class: small
     steps: 
       - checkout
-      - run: docker build -t invectys/$CIRCLE_BRANCH $CIRCLE_WORKING_DIRECTORY
+      - run: docker build -t invectys/$CIRCLE_BRANCH .
       - run: echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
       - run: docker push invectys/$CIRCLE_BRANCH
+  deploy:
+    resource_class: main-runner/reg-ru
+    machine: true
+    steps:
+      - run: docker image rm invectys/$CIRCLE_BRANCH
+      - run: echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
+      - run: docker run invectys/$CIRCLE_BRANCH -d
 
          
 
@@ -44,3 +51,4 @@ workflows:
     # Inside the workflow, you define the jobs you want to run.
     jobs:
       - build
+      - deploy
