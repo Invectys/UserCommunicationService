@@ -10,16 +10,16 @@ jobs:
     resource_class: small
     steps: 
       - checkout
-      - run: docker build -t invectys/$CIRCLE_BRANCH .
+      - run: docker build -t invectys/user_communications/$CIRCLE_BRANCH .
       - run: echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
-      - run: docker push invectys/$CIRCLE_BRANCH
+      - run: docker push invectys/user_communications/$CIRCLE_BRANCH
   deploy:
     resource_class: main-runner/reg-ru
     machine: true
     steps:
-      - run: docker image rm invectys/$CIRCLE_BRANCH || true
+      - run: docker image rm invectys/user_communications/$CIRCLE_BRANCH || true
       - run: echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
-      - run: docker run invectys/$CIRCLE_BRANCH -d
+      - run: docker run invectys/user_communications/$CIRCLE_BRANCH -d
 
          
 
