@@ -6,9 +6,9 @@ version: 2.1
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
   build:
-    # resource_class: main-runner/reg-ru
+    resource_class: main-runner/reg-ru
     machine: true
-    resource_class: small
+    # resource_class: small
     steps: 
       - checkout
       - run: docker build -t invectys/$CIRCLE_BRANCH .
@@ -51,4 +51,7 @@ workflows:
     # Inside the workflow, you define the jobs you want to run.
     jobs:
       - build
-      - deploy
+      - deploy:
+          required: build
+          type: approval
+
