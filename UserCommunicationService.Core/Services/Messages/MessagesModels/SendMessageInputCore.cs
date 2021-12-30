@@ -1,4 +1,5 @@
-﻿using UserCommunicationService.database.Repositories.Messages.MessagesModels;
+﻿using UserCommunicationService.Core.Services.Messages.MessagesModels;
+using UserCommunicationService.database.Repositories.Messages.MessagesModels;
 
 namespace UserCommunicationService.Core.Services.MessagesModels
 {
@@ -31,6 +32,11 @@ namespace UserCommunicationService.Core.Services.MessagesModels
                 content: Content, 
                 creationTime: CreationTime
             );
+        }
+
+        public ReceiveMessageCore ToReceiveMessageCore()
+        {
+            return new ReceiveMessageCore(chatId: ChatId, toId: ToId, fromId: FromId, content: Content);
         }
     }
 }

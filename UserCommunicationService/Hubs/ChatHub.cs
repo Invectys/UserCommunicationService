@@ -21,16 +21,22 @@ namespace UserCommunicationService.Hubs
 
         public async Task SendMessage(SendMessageInput input)
         {
+            var coreModel = input.ToCoreModel(DateTime.Now);
+            var chatId = coreModel.ChatId;
+
+            await _messagesService.SaveMessage(coreModel);
+
+            var receiveMessage = new ReceiveMessage(coreModel.ToReceiveMessageCore());
+            await Clients.Group(chatId.ToString()).SendAsync(HubMethodsNames.NewMessageName, receiveMessage);
+            
+
             _logger.LogInformation($"Sending message {input.FromId} to {input.ToId} content: {input.Content}");
-            var toId = input.ToId.ToString();
-            await Clients.User(toId).SendAsync(HubMethodsNames.NewMessageName, input.Content);
-            await _messagesService.SaveMessage(input.ToCoreModel(DateTime.Now));
         }
 
         public async Task FetchMessages(FetchMessagesInput input)
         {
             var page = _messagesService.FetchMessages(input.ToCore());
-            var result = new FetchMessagesOutput(page, page.PagingState);
+            var result = new FetchMessagesOutput(page, pagingState: page.PagingState, chatId: input.ChatId);
             await Clients.Caller.SendAsync(HubMethodsNames.FetchingMessagesHistory, result);
         }
     }

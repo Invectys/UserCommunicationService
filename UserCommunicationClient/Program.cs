@@ -1,59 +1,59 @@
 ﻿
+using System.Text.RegularExpressions;
+using UserCommunicationClient;
 
-
-using Microsoft.AspNetCore.SignalR.Client;
-using UserCommunicationClient.api;
+//"28dafc00-757b-4c89-89a8-5eceb8d7e156"
 
 Console.WriteLine("Start User communication client");
-Console.ReadKey();
+Console.WriteLine("Input your uid");
 
-HubConnection connection;
-connection = new HubConnectionBuilder()
-        .WithUrl("http://localhost:5203/hubs/chat")
-        .Build();
-
-connection.On<string, string>("NewMessage", (user, message) =>
+var uid = Console.ReadLine();
+if(uid == null)
 {
-    Console.WriteLine(user + ":" + message);
-});
+    return;
+}
 
-byte[]? pagingState = null;
-
-connection.On<FetchMessagesOutput>("FetchingMessagesHistory", (output) =>
-{
-    Console.WriteLine("fetched messages");
-    pagingState = output.PagingState;
-    foreach (var item in output.Messages)
-    {
-        Console.WriteLine($"{item.CreationTime.ToShortDateString()}: from={item.FromId} to={item.ToId} content={item.Content}");
-    }
-    
-});
-
-await connection.StartAsync();
-
-var uid = "28dafc00-757b-4c89-89a8-5eceb8d7e156";
+var chatApi = new ChatApi("http://localhost:5203/hubs/chat", uid);
+await chatApi.Init();
 
 
 while (true)
 {
-    //Console.WriteLine("Write message");
-    //var message = Console.ReadLine();
-    //if (message == null)
-    //    continue;
+    Console.WriteLine("What do u want to do ?");
+    Console.WriteLine("SendMessage <toId> <message>");
+    Console.WriteLine("FetchMessages <toId>");
+    var inputLine = Console.ReadLine();
+    if(inputLine == null)
+    {
+        continue;
+    }
 
-    //var url = "http://localhost:5203";
-    //var input = new SendMessageInput(new Guid(uid), Guid.NewGuid(), message);
-    //var client = new HttpClient();
-    //client.BaseAddress = new Uri(url);
+    inputLine = Regex.Replace(inputLine, @"\s+", " ").Trim();
+    var inputArgs = inputLine.Split(' ');
 
-    //await connection.SendAsync("SendMessage", uid, input);
+    if(inputArgs == null || inputArgs.Length == 0)
+    {
+        continue;
+    }
 
-    Console.WriteLine("Fetch results PRESS ANY KEYS");
-    Console.ReadKey();
-    var fetch = new FetchMessagesInput(5, pagingState);
-    await connection.SendAsync("FetchMessages", fetch);
+    string GetCommand()
+    {
+        return inputArgs![0];
+    }
 
-    //var result = await client.PostAsync("/api/Messages/SendMessage", input.ToHttpContent());
-    //var content = result.Content.ReadAsStringAsync().Result;
+    if(GetCommand() == "SendMessage")
+    {
+        var toId = inputArgs[1];
+        var message = inputArgs[2];
+        var chatId = inputArgs[3];
+        await chatApi.SendMessage(toId: toId, chatId: chatId, message: message);
+        continue;
+    }
+
+    if(GetCommand() == "FetchMessages")
+    {
+        var chatId = inputArgs[1];
+        await chatApi.FetchMessages(chatId);
+        continue;
+    }
 }

@@ -8,14 +8,16 @@ namespace UserCommunicationClient.api
 {
     public class FetchMessagesInput
     {
-        public FetchMessagesInput(int pageSize, byte[]? pagingState)
+        public FetchMessagesInput(int pageSize, byte[]? pagingState, string chatId)
         {
             PageSize = pageSize;
+            ChatId = chatId;
             PagingState = pagingState;
         }
 
 
         public int PageSize { get; }
         public byte[]? PagingState { get; }
+        public string ChatId { get; }
     }
 }
