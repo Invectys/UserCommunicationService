@@ -17,6 +17,7 @@ jobs:
     resource_class: main-runner/reg-ru
     machine: true
     steps:
+      - run: docker stop invectys/user_communications || true
       - run: docker image rm invectys/user_communications || true
       - run: echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
       - run: docker run invectys/user_communications -d
