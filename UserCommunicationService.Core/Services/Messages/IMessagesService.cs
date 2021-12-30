@@ -10,5 +10,6 @@ namespace UserCommunicationService.Core.Services.Messages
     {
         Task SaveMessage(SendMessageInputCore input);
         IPage<MessageDatabase> FetchMessages(FetchMessagesInputCore input);
+
     }
 }

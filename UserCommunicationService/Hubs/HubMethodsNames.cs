@@ -10,5 +10,6 @@ namespace UserCommunicationService.Hubs
     {
         public static string NewMessageName = "NewMessage";
         public static string FetchingMessagesHistory = "FetchingMessagesHistory";
+        public static string FetchingChats = "FetchingChats";
     }
 }

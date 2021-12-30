@@ -8,7 +8,7 @@ namespace UserCommunicationClient.api
 {
     public class ReceiveMessage
     {
-        public ReceiveMessage(Guid fromId, Guid toId, Guid chatId, string content)
+        public ReceiveMessage(Guid fromId, Guid? toId, Guid chatId, string content)
         {
             ToId = toId;
             FromId = fromId;
@@ -18,7 +18,7 @@ namespace UserCommunicationClient.api
 
 
         public Guid FromId { get; }
-        public Guid ToId { get; }
+        public Guid? ToId { get; }
         public Guid ChatId { get; }
         public string Content { get; }
     }

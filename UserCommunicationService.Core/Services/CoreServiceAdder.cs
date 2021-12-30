@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UserCommunicationService.Core.Services.Chats;
 using UserCommunicationService.Core.Services.Messages;
 using UserCommunicationService.database;
 
@@ -15,6 +16,7 @@ namespace UserCommunicationService.Core.Services
         {
             collection.AddSingleton(new DatabaseBuilder().BuildDatabase());
             collection.AddSingleton<IMessagesService, MessagesService>();
+            collection.AddSingleton<IChatsService, ChatsService>();
 
         }
     }

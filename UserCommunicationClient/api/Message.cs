@@ -8,22 +8,22 @@ namespace UserCommunicationClient.api
 {
     public class Message
     {
-        public Message(Guid id,Guid chatId, Guid fromId, Guid toId, string content, DateTime creationTime)
+        public Message(Guid id, Guid fromId, Guid? toId, Guid chatId, string content, DateTime creationTimeStamp)
         {
-            ChatId = chatId;
             ToId = toId;
             FromId = fromId;
             Content = content;
-            CreationTime = creationTime;
+            CreationTimeStamp = creationTimeStamp;
+            ChatId = chatId;
             Id = id;
         }
 
 
-        public Guid Id { get; }
-        public Guid ChatId { get; }
-        public Guid FromId { get; }
-        public Guid ToId { get; }
-        public string Content { get; }
-        public DateTime CreationTime { get; }
+        public Guid Id { get; set; }
+        public Guid FromId { get; set; }
+        public Guid? ToId { get; set; }
+        public Guid ChatId { get; set; }
+        public string Content { get; set; }
+        public DateTime CreationTimeStamp { get; set; }
     }
 }

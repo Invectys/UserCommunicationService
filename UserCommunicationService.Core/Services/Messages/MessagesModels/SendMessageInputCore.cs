@@ -5,21 +5,21 @@ namespace UserCommunicationService.Core.Services.MessagesModels
 {
     public class SendMessageInputCore
     {
-        public SendMessageInputCore(Guid fromId, Guid toId, Guid chatId, string content, DateTime creationTime)
+        public SendMessageInputCore(Guid fromId, Guid? toId, Guid chatId, string content, DateTime creationTimeStamp)
         {
             ToId = toId;
             FromId = fromId;
             Content = content;
-            CreationTime = creationTime;
+            CreationTimeStamp = creationTimeStamp;
             ChatId = chatId;
         }
 
 
         public Guid FromId { get; }
-        public Guid ToId { get; }
+        public Guid? ToId { get; }
         public Guid ChatId { get; }
         public string Content { get; }
-        public DateTime CreationTime { get; }
+        public DateTime CreationTimeStamp { get; }
 
 
         public MessageDatabase ToDatabase(Guid guid)
@@ -29,8 +29,8 @@ namespace UserCommunicationService.Core.Services.MessagesModels
                 toId: ToId, 
                 fromId: FromId,
                 chatId: ChatId, 
-                content: Content, 
-                creationTime: CreationTime
+                content: Content,
+                creationTimeStamp: CreationTimeStamp
             );
         }
 

@@ -8,7 +8,7 @@ namespace UserCommunicationService.Core.Services.Messages.MessagesModels
 {
     public class ReceiveMessageCore
     {
-        public ReceiveMessageCore(Guid fromId, Guid toId, Guid chatId, string content)
+        public ReceiveMessageCore(Guid fromId, Guid? toId, Guid chatId, string content)
         {
             ToId = toId;
             FromId = fromId;
@@ -18,7 +18,7 @@ namespace UserCommunicationService.Core.Services.Messages.MessagesModels
 
 
         public Guid FromId { get; }
-        public Guid ToId { get; }
+        public Guid? ToId { get; }
         public Guid ChatId { get; }
         public string Content { get; }
 

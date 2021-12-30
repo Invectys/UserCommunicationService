@@ -4,7 +4,7 @@ namespace UserCommunicationService.Controllers.MessagesModels
 {
     public class FetchMessagesInput
     {
-        public FetchMessagesInput(int pageSize, byte[] pagingState, string chatId)
+        public FetchMessagesInput(int pageSize, byte[] pagingState, Guid chatId)
         {
             PageSize = pageSize;
             PagingState = pagingState;
@@ -14,7 +14,7 @@ namespace UserCommunicationService.Controllers.MessagesModels
 
         public int PageSize { get; }
         public byte[] PagingState { get; }
-        public string ChatId { get; set; }
+        public Guid ChatId { get; set; }
 
         public FetchMessagesInputCore ToCore()
         {

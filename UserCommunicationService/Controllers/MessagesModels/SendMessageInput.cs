@@ -4,7 +4,7 @@ namespace UserCommunicationService.Controllers.MessagesModels
 {
     public class SendMessageInput
     {
-        public SendMessageInput(Guid fromId, Guid toId, string content, Guid? chatId = null)
+        public SendMessageInput(Guid fromId, Guid? toId, Guid chatId, string content)
         {
             ToId = toId;
             FromId = fromId;
@@ -14,21 +14,13 @@ namespace UserCommunicationService.Controllers.MessagesModels
 
 
         public Guid FromId { get; }
-        public Guid ToId { get; }
-        public Guid? ChatId { get; private set; }
+        public Guid? ToId { get; }
+        public Guid ChatId { get; }
         public string Content { get; }
 
-        public SendMessageInputCore ToCoreModel(DateTime creationTime)
+        public SendMessageInputCore ToCoreModel(DateTime creationTimeStamp)
         {
-            Guid? chatId = ChatId;
-            if (chatId.HasValue == false)
-            {
-                chatId = new Guid();
-            }
-
-            return new SendMessageInputCore(chatId: chatId.Value, toId: ToId, fromId: FromId, content: Content, creationTime: creationTime);
+            return new SendMessageInputCore(chatId: ChatId, toId: ToId, fromId: FromId, content: Content, creationTimeStamp: creationTimeStamp);
         }
-
-       
     }
 }

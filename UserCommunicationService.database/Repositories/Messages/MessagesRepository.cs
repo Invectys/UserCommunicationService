@@ -11,22 +11,18 @@ using UserCommunicationService.database.Repositories.Messages.MessagesModels;
 
 namespace UserCommunicationService.database.Repositories
 {
-    public class MessagesRepository
+    public class MessagesRepository : Repository
     {
-        public MessagesRepository(Database database)
+        public MessagesRepository(Database database) : base(database)
         {
-            _database = database;
-
         }
 
 
-        private Database _database;
-
         public async Task SaveMessage(MessageDatabase message)
         {
-            var preparedInsert = _database.Session.Prepare(MessagesDatabaseQueries.InsertPrepareMessageQuery);
-            var statement = preparedInsert.Bind(message.Id, message.FromId, message.ToId, message.Content, message.CreationTime);
-            await _database.Session.ExecuteAsync(statement);
+            var preparedInsert = database.Session.Prepare(MessagesDatabaseQueries.InsertPrepareMessageQuery);
+            var statement = preparedInsert.Bind(message.Id, message.ChatId, message.FromId, message.ToId, message.Content, message.CreationTimeStamp);
+            await database.Session.ExecuteAsync(statement);
         }
 
         public IPage<MessageDatabase> Fetch(int pageSize, byte[] pagingState, string chatId)
@@ -34,10 +30,12 @@ namespace UserCommunicationService.database.Repositories
             var queryStr = $"SELECT * FROM {Constants.MessagesTableName} WHERE {MessageDatabaseColumnNames.ChatIdName} = {chatId}";
           
             var queryOptions = Cql.New(queryStr).WithOptions(opt => opt.SetPageSize(pageSize).SetPagingState(pagingState));
-            var mapper = _database.Mapper;
+            var mapper = database.Mapper;
             IPage<MessageDatabase> page = mapper.FetchPage<MessageDatabase>(queryOptions);
             return page;
         }
+
+        
 
     }
 }

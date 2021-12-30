@@ -25,7 +25,7 @@ namespace UserCommunicationService.Core.Services.Messages
 
         public IPage<MessageDatabase> FetchMessages(FetchMessagesInputCore input)
         {
-            var result = _repository.Fetch(input.PageSize, input.PagingState, input.ChatId);
+            var result = _repository.Fetch(input.PageSize, input.PagingState, input.ChatId.ToString());
             return result;
         }
     }

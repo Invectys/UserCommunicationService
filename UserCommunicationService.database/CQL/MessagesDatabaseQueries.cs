@@ -15,7 +15,7 @@ namespace UserCommunicationService.database.CQL
             $"{MessageDatabaseColumnNames.FromIdName}, " +
             $"{MessageDatabaseColumnNames.ToIdName}, " +
             $"{MessageDatabaseColumnNames.ContentName}, " +
-            $"{MessageDatabaseColumnNames.CreationTimeName})";
+            $"{MessageDatabaseColumnNames.CreationTimestampName})";
 
         public static string InsertPrepareMessageQuery = $"INSERT INTO {Constants.MessagesTableName} {_messageValueBloc} VALUES (?, ?, ?, ?, ?, ?);";
 

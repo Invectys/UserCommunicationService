@@ -9,10 +9,10 @@ namespace UserCommunicationService.database.CQL
     internal static class MessageDatabaseColumnNames
     {
         public static string IdName = "id";
-        public static string FromIdName = "from_id";
-        public static string ToIdName = "to_id";
-        public static string ChatIdName = "chat_id";
+        public static string FromIdName = "fromid";
+        public static string ToIdName = "toid";
+        public static string ChatIdName = "chatid";
         public static string ContentName = "content";
-        public static string CreationTimeName = "creation_time";
+        public static string CreationTimestampName = "creationtimestamp";
     }
 }

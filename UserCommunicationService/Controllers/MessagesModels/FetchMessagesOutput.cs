@@ -4,7 +4,7 @@ namespace UserCommunicationService.Controllers.MessagesModels
 {
     public class FetchMessagesOutput
     {
-        public FetchMessagesOutput(IEnumerable<MessageDatabase> messages, byte[] pagingState, string chatId)
+        public FetchMessagesOutput(IEnumerable<MessageDatabase> messages, byte[] pagingState, Guid chatId)
         {
             Messages = messages;
             ChatId = chatId;
@@ -14,6 +14,6 @@ namespace UserCommunicationService.Controllers.MessagesModels
 
         public IEnumerable<MessageDatabase> Messages { get; }
         public byte[] PagingState { get; }
-        public string ChatId { get; }
+        public Guid ChatId { get; }
     }
 }

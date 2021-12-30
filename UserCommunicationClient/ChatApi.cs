@@ -19,26 +19,51 @@ namespace UserCommunicationClient
 
         private HubConnection _connection;
         private string _chatHubUrl;
-        private byte[]? _pagingState = null;
         private int _pageSize = 5;
         private string _uid;
+
+        private Dictionary<string, byte[]> PagingStates = new Dictionary<string, byte[]>();
 
         public async Task Init()
         {
             CreateConnection();
             await Start();
+            await InitConnectedUser();
             BindRPC();
+            
         }
 
-        public async Task FetchMessages(string chatId)
+        public async Task AddUserToChat(Guid userId, Guid chatId)
         {
-            var fetch = new FetchMessagesInput(_pageSize, _pagingState, chatId);
+            var input = new AddUserToChatInput(userId, chatId);
+            await _connection.SendAsync("AddUserToChat", input);
+        }
+
+        public async Task FetchMessages(Guid chatId)
+        {
+            var messagesId = chatId.ToString() + "-messages";
+            PagingStates.TryGetValue(messagesId, out var state);
+            var fetch = new FetchMessagesInput(_pageSize, state, chatId);
             await _connection.SendAsync("FetchMessages", fetch);
         }
 
-        public async Task SendMessage(string toId, string chatId, string message)
+        public async Task FetchChats(Guid userId)
         {
-            var input = new SendMessageInput(fromId: new Guid(_uid), toId: new Guid(toId), chatId: new Guid(chatId), content: message);
+            var userChatsPaging = userId + "-chats";
+            PagingStates.TryGetValue(userChatsPaging, out var state);
+            var fetch = new FetchChatsInput(userId: userId, pagingState: state);
+            await _connection.SendAsync("FetchChats", fetch);
+        }
+
+        public async Task CreateDialog(Guid firstUserId, Guid secondUserId)
+        {
+            var input = new CreateDialogInput(firstUserId: firstUserId, secondUserId: secondUserId);
+            await _connection.SendAsync("CreateDialog", input);
+        }
+
+        public async Task SendMessage(Guid chatId, string message, Guid? toId = null)
+        {
+            var input = new SendMessageInput(fromId: new Guid(_uid), toId: toId, chatId: chatId, content: message);
             await _connection.SendAsync("SendMessage", input);
         }
 
@@ -59,19 +84,34 @@ namespace UserCommunicationClient
         {
             _connection.On<ReceiveMessage>("NewMessage", (message) =>
             {
-                Console.WriteLine("chatId=" + message.ChatId + " from:" + message.FromId.ToString() + ":" + message.Content);
+                Console.WriteLine("NewMessage! chatId=" + message.ChatId + " from:" + message.FromId.ToString() + ": " + message.Content);
             });
 
             _connection.On<FetchMessagesOutput>("FetchingMessagesHistory", (output) =>
             {
-                Console.WriteLine("fetched messages");
-                _pagingState = output.PagingState;
+                Console.WriteLine("fetched messages Chat = " + output.ChatId);
+                PagingStates[output.ChatId.ToString() + "-messages"] = output.PagingState;
                 foreach (var item in output.Messages)
                 {
-                    Console.WriteLine($"{item.CreationTime.ToShortDateString()}: from={item.FromId} to={item.ToId} content={item.Content}");
+                    Console.WriteLine($"{item.CreationTimeStamp.ToShortTimeString()} from={item.FromId}: {item.Content}");
+                }
+            });
+
+            _connection.On<FetchChatsOutput>("FetchingChats", (output) =>
+            {
+                Console.WriteLine("fetched chats");
+                PagingStates[output.UserId.ToString() + "-chats"] = output.PagingState;
+                foreach (var item in output.Results)
+                {
+                    Console.WriteLine($"Chat id = {item.ChatId},");
                 }
             });
         }
 
+        private async Task InitConnectedUser()
+        {
+            var init = new InitConnectedUserInput(new Guid(_uid));
+            await _connection.SendAsync("InitConnectedUser", init);
+        }
     }
 }

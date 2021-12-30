@@ -2,7 +2,7 @@
 {
     public class FetchMessagesInputCore
     {
-        public FetchMessagesInputCore(int pageSize, byte[] pagingState, string chatId)
+        public FetchMessagesInputCore(int pageSize, byte[] pagingState, Guid chatId)
         {
             PageSize = pageSize;
             PagingState = pagingState;
@@ -12,6 +12,6 @@
 
         public int PageSize { get; }
         public byte[] PagingState { get; }
-        public string ChatId { get; set; }
+        public Guid ChatId { get; set; }
     }
 }
