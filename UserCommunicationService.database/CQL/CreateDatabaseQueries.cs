@@ -10,8 +10,10 @@ namespace UserCommunicationService.database.CQL
     {
         public static string CreateKeyspaceCQL = $"CREATE KEYSPACE IF NOT EXISTS {Constants.KeyspaceName} WITH replication = {{'class':'SimpleStrategy', 'replication_factor':'1'}};";
 
+
+
         public static string CreateMessagesTableCQL = $"CREATE TABLE IF NOT EXISTS {Constants.MessagesTableName} ({MessageDatabaseColumnNames.IdName} uuid, " +
-            $"{MessageDatabaseColumnNames.ChatIdName} uuid,{MessageDatabaseColumnNames.FromIdName} uuid, {MessageDatabaseColumnNames.ToIdName} uuid, {MessageDatabaseColumnNames.ContentName} text, {MessageDatabaseColumnNames.CreationTimestampName} timestamp, PRIMARY KEY ({MessageDatabaseColumnNames.ChatIdName}, {MessageDatabaseColumnNames.CreationTimestampName}) );";
+            $"{MessageDatabaseColumnNames.ChatIdName} uuid,{MessageDatabaseColumnNames.FromIdName} uuid, {MessageDatabaseColumnNames.ToIdName} uuid, {MessageDatabaseColumnNames.ContentName} text, {MessageDatabaseColumnNames.SeenName} boolean, {MessageDatabaseColumnNames.CreationTimestampName} timestamp, PRIMARY KEY ({MessageDatabaseColumnNames.ChatIdName}, {MessageDatabaseColumnNames.CreationTimestampName}) ) WITH CLUSTERING ORDER BY ({MessageDatabaseColumnNames.CreationTimestampName} DESC);";
 
 
 

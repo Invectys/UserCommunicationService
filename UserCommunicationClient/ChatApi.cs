@@ -30,7 +30,12 @@ namespace UserCommunicationClient
             await Start();
             await InitConnectedUser();
             BindRPC();
-            
+        }
+
+        public async Task Stop()
+        {
+            await _connection.StopAsync();
+            await _connection.DisposeAsync();
         }
 
         public async Task AddUserToChat(Guid userId, Guid chatId)

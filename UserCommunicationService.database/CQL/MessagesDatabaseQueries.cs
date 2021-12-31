@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Cassandra;
 using UserCommunicationService.database.Repositories.Messages.MessagesModels;
 
 namespace UserCommunicationService.database.CQL
@@ -15,12 +11,25 @@ namespace UserCommunicationService.database.CQL
             $"{MessageDatabaseColumnNames.FromIdName}, " +
             $"{MessageDatabaseColumnNames.ToIdName}, " +
             $"{MessageDatabaseColumnNames.ContentName}, " +
+            $"{MessageDatabaseColumnNames.SeenName}, " +
             $"{MessageDatabaseColumnNames.CreationTimestampName})";
 
-        public static string InsertPrepareMessageQuery = $"INSERT INTO {Constants.MessagesTableName} {_messageValueBloc} VALUES (?, ?, ?, ?, ?, ?);";
+        public readonly static string InsertPrepareMessageQuery = $"INSERT INTO {Constants.MessagesTableName} {_messageValueBloc} VALUES (?, ?, ?, ?, ?, ?, ?);";
 
+        public readonly static string SelectFromChat = $"SELECT * FROM {Constants.MessagesTableName} WHERE {MessageDatabaseColumnNames.ChatIdName} = ?";
 
-        
+        public static BoundStatement BindInsert(ISession session, MessageDatabase message)
+        {
+            var preparedInsert = session.Prepare(InsertPrepareMessageQuery);
+            var statement = preparedInsert.Bind(message.Id, message.ChatId, message.FromId, message.ToId, message.Content, message.Seen, message.CreationTimeStamp);
+            return statement;
+        }
+
+        public static string GetSelectByChatIdQuery(string chatId)
+        {
+            var result = SelectFromChat.Replace("?", chatId);
+            return result;
+        }
 
     }
 }

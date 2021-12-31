@@ -29,8 +29,11 @@ while(parsed == false)
 }
 
 
+var debugUrl = "http://localhost:5203/hubs/chat";
+var prodUrl = "http://194.67.104.187:5023/hubs/chat";
 
-var chatApi = new ChatApi("http://localhost:5203/hubs/chat", uid);
+
+var chatApi = new ChatApi(debugUrl, uid);
 await chatApi.Init();
 
 Console.WriteLine("What do u want to do ?");
@@ -75,6 +78,14 @@ while (true)
 
         selectedChatId = inputArgs[1];
         Console.WriteLine("Selected!");
+        continue;
+    }
+
+    if(GetCommand() == "DEBUG")
+    {
+        await chatApi.Stop();
+        chatApi = new ChatApi(debugUrl, uid);
+        await chatApi.Init();
         continue;
     }
 

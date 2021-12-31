@@ -16,7 +16,14 @@ namespace UserCommunicationService.database.Repositories.Messages.MessagesModels
         }
 
         // Use it
-        public MessageDatabase(Guid id, Guid fromId, Guid? toId, Guid chatId, string content, DateTime creationTimeStamp)
+        public MessageDatabase(
+            Guid id, 
+            Guid fromId,
+            Guid? toId, 
+            Guid chatId, 
+            string content, 
+            bool seen,
+            DateTime creationTimeStamp)
         {
             ToId = toId;
             FromId = fromId;
@@ -24,14 +31,16 @@ namespace UserCommunicationService.database.Repositories.Messages.MessagesModels
             CreationTimeStamp = creationTimeStamp;
             ChatId = chatId;
             Id = id;
+            Seen = seen;
         }
 
 
-        public Guid Id { get; set; }
-        public Guid FromId { get; set; }
-        public Guid? ToId { get; set; }
-        public Guid ChatId { get; set; }
-        public string Content { get; set; }
-        public DateTime CreationTimeStamp { get; set; }
+        public Guid Id { get;  }
+        public Guid FromId { get;}
+        public Guid? ToId { get; }
+        public Guid ChatId { get; }
+        public string Content { get; }
+        public bool Seen { get; set; }
+        public DateTime CreationTimeStamp { get; }
     }
 }

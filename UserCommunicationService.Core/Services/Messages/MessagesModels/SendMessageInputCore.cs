@@ -30,6 +30,7 @@ namespace UserCommunicationService.Core.Services.MessagesModels
                 fromId: FromId,
                 chatId: ChatId, 
                 content: Content,
+                seen: false,
                 creationTimeStamp: CreationTimeStamp
             );
         }
