@@ -62,6 +62,7 @@ namespace UserCommunicationService.database
             // Has Chat contains User relation
             // Used for fetching all user chats
             _session.Execute(CreateDatabaseQueries.CreateUserToChatTableCQL);
+            _session.Execute(CreateDatabaseQueries.CreateChatToUserTableCQL);
         }
 
     }

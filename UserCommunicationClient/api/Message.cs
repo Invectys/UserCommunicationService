@@ -14,7 +14,6 @@ namespace UserCommunicationClient.api
             Guid? toId,
             Guid chatId,
             string content,
-            bool seen,
             DateTime creationTimeStamp
         )
         {
@@ -24,7 +23,6 @@ namespace UserCommunicationClient.api
             CreationTimeStamp = creationTimeStamp;
             ChatId = chatId;
             Id = id;
-            Seen = seen;
         }
 
 
@@ -33,7 +31,6 @@ namespace UserCommunicationClient.api
         public Guid? ToId { get; }
         public Guid ChatId { get; }
         public string Content { get; }
-        public bool Seen { get; set; }
         public DateTime CreationTimeStamp { get; }
     }
 }

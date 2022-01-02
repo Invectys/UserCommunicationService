@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Caching.Distributed;
 using UserCommunicationService.Controllers.MessagesModels;
 using UserCommunicationService.Core.Services.Chats;
 using UserCommunicationService.Core.Services.Messages;
@@ -13,6 +14,7 @@ namespace UserCommunicationService.Hubs
         public ChatHub(
             IMessagesService messagesService,
             IChatsService chatsService,
+            IDistributedCache distributedCache,
             ILogger<ChatHub> logger)
         {
             _messagesService = messagesService;
@@ -24,7 +26,9 @@ namespace UserCommunicationService.Hubs
         private ILogger<ChatHub> _logger;
         private IMessagesService _messagesService;
         private IChatsService _chatsService;
+        private IDistributedCache _distributedCache;
 
+        // user id to connections mapper
         private readonly static ConnectionMapping<string> _connections = new ConnectionMapping<string>();
 
 
@@ -48,8 +52,8 @@ namespace UserCommunicationService.Hubs
         public async Task CreateDialog(CreateDialogInput input)
         {
             var chatId = Guid.NewGuid();
-            var row1 = new UserToChatDatabase(id: Guid.NewGuid(), userId: input.FirstUserId, chatId: chatId);
-            var row2 = new UserToChatDatabase(id: Guid.NewGuid(), userId: input.SecondUserId, chatId: chatId);
+            var row1 = new UserToChatDatabase(userId: input.FirstUserId, chatId: chatId);
+            var row2 = new UserToChatDatabase(userId: input.SecondUserId, chatId: chatId);
             var list = new List<UserToChatDatabase>() { row1, row2 };
             await _chatsService.AddUsersToChat(list);
 
@@ -59,7 +63,7 @@ namespace UserCommunicationService.Hubs
 
         public async Task AddUserToChat(AddUserToChatInput input)
         {
-            var row = new UserToChatDatabase(id: Guid.NewGuid(), userId: input.UserId, chatId: input.ChatId);
+            var row = new UserToChatDatabase(userId: input.UserId, chatId: input.ChatId);
             var list = new List<UserToChatDatabase>() { row };
             await _chatsService.AddUsersToChat(list);
 
@@ -71,13 +75,22 @@ namespace UserCommunicationService.Hubs
             var coreModel = input.ToCoreModel(DateTime.Now);
             var chatId = coreModel.ChatId;
 
+            // save to database 
             await _messagesService.SaveMessage(coreModel);
+
+            // increase notifications counter (not read messages)
+            await _chatsService.IncrementNotificationsCounter(chatId, coreModel.FromId);
 
             var receiveMessage = new ReceiveMessage(coreModel.ToReceiveMessageCore());
             await Clients.Group(chatId.ToString()).SendAsync(HubMethodsNames.NewMessageName, receiveMessage);
             
 
             _logger.LogInformation($"Sending message {input.FromId} to {input.ToId} content: {input.Content}");
+        }
+
+        public async Task ClearChatNotifications(ClearChatNotificationsInput input)
+        {
+            await _chatsService.ClearChatNotifications(input.ChatId, input.UserId);
         }
 
         public async Task FetchMessages(FetchMessagesInput input)
@@ -87,13 +100,28 @@ namespace UserCommunicationService.Hubs
             await Clients.Caller.SendAsync(HubMethodsNames.FetchingMessagesHistory, result);
         }
 
+        public async Task FetchChatUsers(FetchChatUsersInput input)
+        {
+
+        }
+
         public async Task FetchChats(FetchChatsInput input)
         {
             var page = _chatsService.FetchChats(input.ToCore());
-            var result = new FetchChatsOutput(page, pagingState: page.PagingState, userId: input.UserId);
+            var items = page.ToList();
+
+            var newMessagesCount = await _chatsService.GetChatsNewMessagesCount(page);
+            var chats = new List<UserToChatOutput>();
+            for(int i = 0; i < page.Count; i++)
+            {
+                var dbChat = items[i];
+                var output = new UserToChatOutput(userId: dbChat.UserId, chatId: dbChat.ChatId, newMessagesCount: newMessagesCount[i]);
+                chats.Add(output);
+            }
+
+            var result = new FetchChatsOutput(chats, pagingState: page.PagingState, userId: input.UserId);
             await Clients.Caller.SendAsync(HubMethodsNames.FetchingChats, result);
         }
-
 
 
         private async Task AddUserConnectionsToGroup(string userId, string group)

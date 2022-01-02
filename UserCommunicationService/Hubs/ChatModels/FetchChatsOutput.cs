@@ -4,7 +4,7 @@ namespace UserCommunicationService.Hubs.ChatModels
 {
     public class FetchChatsOutput
     {
-        public FetchChatsOutput(IEnumerable<UserToChatDatabase> results, byte[] pagingState, Guid userId)
+        public FetchChatsOutput(IEnumerable<UserToChatOutput> results, byte[] pagingState, Guid userId)
         {
             Results = results;
             PagingState = pagingState;
@@ -12,7 +12,7 @@ namespace UserCommunicationService.Hubs.ChatModels
         }
 
 
-        public IEnumerable<UserToChatDatabase> Results { get; }
+        public IEnumerable<UserToChatOutput> Results { get; }
         public byte[] PagingState { get; }
         public Guid UserId { get; }
     }

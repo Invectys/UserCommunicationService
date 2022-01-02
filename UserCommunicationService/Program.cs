@@ -12,6 +12,8 @@ builder.Services.AddRazorPages();
 
 builder.Services.AddSignalR();
 
+
+
 // Add core services
 CoreServiceAdder.AddCoreServices(builder.Services);
 

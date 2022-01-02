@@ -13,7 +13,6 @@ namespace UserCommunicationService.database.CQL
         public static string ToIdName = "toid";
         public static string ChatIdName = "chatid";
         public static string ContentName = "content";
-        public static string SeenName = "seen";
         public static string CreationTimestampName = "creationtimestamp";
     }
 }

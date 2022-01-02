@@ -8,7 +8,9 @@ namespace UserCommunicationService.Core.Services.Messages
 {
     public class MessagesService : IMessagesService
     {
-        public MessagesService(MessagesRepository repository)
+        public MessagesService(
+            MessagesRepository repository
+            )
         {
             _repository = repository;
         }
@@ -22,6 +24,8 @@ namespace UserCommunicationService.Core.Services.Messages
             var sendMessageDatabase = input.ToDatabase(Guid.NewGuid());
             await _repository.SaveMessage(sendMessageDatabase);
         }
+
+        
 
         public IPage<MessageDatabase> FetchMessages(FetchMessagesInputCore input)
         {

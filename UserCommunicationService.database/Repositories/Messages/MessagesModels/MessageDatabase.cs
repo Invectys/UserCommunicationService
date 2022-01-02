@@ -21,8 +21,7 @@ namespace UserCommunicationService.database.Repositories.Messages.MessagesModels
             Guid fromId,
             Guid? toId, 
             Guid chatId, 
-            string content, 
-            bool seen,
+            string content,
             DateTime creationTimeStamp)
         {
             ToId = toId;
@@ -31,16 +30,14 @@ namespace UserCommunicationService.database.Repositories.Messages.MessagesModels
             CreationTimeStamp = creationTimeStamp;
             ChatId = chatId;
             Id = id;
-            Seen = seen;
         }
 
 
-        public Guid Id { get;  }
-        public Guid FromId { get;}
-        public Guid? ToId { get; }
-        public Guid ChatId { get; }
-        public string Content { get; }
-        public bool Seen { get; set; }
-        public DateTime CreationTimeStamp { get; }
+        public Guid Id { get; set; }
+        public Guid FromId { get; set; }
+        public Guid? ToId { get; set; }
+        public Guid ChatId { get; set; }
+        public string Content { get; set; }
+        public DateTime CreationTimeStamp { get; set; }
     }
 }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace UserCommunicationService.database.Repositories.Chats.Models
+﻿namespace UserCommunicationService.database.Repositories.Chats.Models
 {
     public class UserToChatDatabase
     {
@@ -15,15 +9,13 @@ namespace UserCommunicationService.database.Repositories.Chats.Models
         {
         }
 
-        public UserToChatDatabase(Guid id, Guid userId, Guid chatId )
+        public UserToChatDatabase(Guid userId, Guid chatId)
         {
-            Id = id;
             UserId = userId;
             ChatId = chatId;
         }
 
 
-        public Guid Id { get; set; }
         public Guid UserId { get; set; }
         public Guid ChatId { get; set; }
     }

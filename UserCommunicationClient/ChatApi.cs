@@ -1,9 +1,4 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UserCommunicationClient.api;
 
 namespace UserCommunicationClient
@@ -72,6 +67,11 @@ namespace UserCommunicationClient
             await _connection.SendAsync("SendMessage", input);
         }
 
+        public async Task ClearChatNotifications(Guid chatId, Guid userId)
+        {
+            var input = new ClearChatNotificationsInput(chatId, userId);
+            await _connection.SendAsync("ClearChatNotifications", input);
+        }
 
         private void CreateConnection()
         {
@@ -108,7 +108,7 @@ namespace UserCommunicationClient
                 PagingStates[output.UserId.ToString() + "-chats"] = output.PagingState;
                 foreach (var item in output.Results)
                 {
-                    Console.WriteLine($"Chat id = {item.ChatId},");
+                    Console.WriteLine($"Chat id = {item.ChatId}, (new {item.NewMessagesCount}) ");
                 }
             });
         }

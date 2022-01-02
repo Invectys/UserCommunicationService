@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UserCommunicationService.database.CQL
+namespace UserCommunicationService.database.CQL.ChatToUser
 {
-    public class UserToChatDatabaseColumnNames
+    public static class ChatToUserDatabaseColumnNames
     {
-        public static string IdName = "id";
         public static string UserId = "userid";
         public static string ChatId = "chatid";
     }
