@@ -8,7 +8,7 @@ namespace UserCommunicationClient.api
 {
     public class FetchChatsInput
     {
-        public FetchChatsInput(Guid userId, byte[]? pagingState, int pageSize = 5)
+        public FetchChatsInput(string userId, byte[]? pagingState, int pageSize = 5)
         {
             UserId = userId;
             PageSize = pageSize;
@@ -16,7 +16,7 @@ namespace UserCommunicationClient.api
         }
 
 
-        public Guid UserId { get; set; }
+        public string UserId { get; set; }
         public int PageSize { get; set; }
         public byte[]? PagingState { get; set; }
     }

@@ -11,10 +11,9 @@ using UserCommunicationClient;
 Console.WriteLine("Start User communication client");
 
 
-bool parsed = false;
 string uid = "";
 
-while(parsed == false)
+while(string.IsNullOrEmpty(uid))
 {
     Console.WriteLine("Examples");
     Console.WriteLine("28dafc00-757b-4c89-89a8-5eceb8d7e000");
@@ -25,7 +24,6 @@ while(parsed == false)
     Console.WriteLine("Input your uid");
 
     uid = Console.ReadLine();
-    parsed = Guid.TryParse(uid, out Guid parsedUid);
 }
 
 
@@ -91,7 +89,7 @@ while (true)
 
     if(GetCommand() == "FetchChats")
     {
-        await chatApi.FetchChats(new Guid(uid));
+        await chatApi.FetchChats(uid);
         continue;
     }
 
@@ -106,7 +104,7 @@ while (true)
         var userId = inputArgs[1];
         var chatId = inputArgs[2];
 
-        await chatApi.AddUserToChat(new Guid(userId), new Guid(chatId));
+        await chatApi.AddUserToChat(userId, new Guid(chatId));
         Console.WriteLine("Added");
     }
 
@@ -119,7 +117,7 @@ while (true)
         }
 
         var secondUser = inputArgs[1];
-        await chatApi.CreateDialog(new Guid(uid), new Guid(secondUser));
+        await chatApi.CreateDialog(uid, secondUser);
         Console.WriteLine("Created!");
         continue;
     }

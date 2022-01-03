@@ -4,7 +4,7 @@ namespace UserCommunicationService.Hubs.ChatModels
 {
     public class FetchChatsInput
     {
-        public FetchChatsInput(Guid userId,  byte[] pagingState, int pageSize = 5)
+        public FetchChatsInput(string userId,  byte[] pagingState, int pageSize = 5)
         {
             UserId = userId;
             PageSize = pageSize;
@@ -12,7 +12,7 @@ namespace UserCommunicationService.Hubs.ChatModels
         }
 
 
-        public Guid UserId { get; set; }
+        public string UserId { get; set; }
         public int PageSize { get; set; }
         public byte[] PagingState { get; set; }
 

@@ -21,8 +21,9 @@ namespace UserCommunicationService.database.Repositories.Chats
             var preparedInsertChatToUser = ChatToUserDatabaseQueries.GetPreparedInsert(database.Session);
             foreach (var row in rows)
             {
+                var chatToUser = new ChatToUserDatabase(row.UserId, row.ChatId);
                 batch.Add(UserToChatDatabaseQueries.BindInsertUserToChat(row, preparedInsertUserToChat));
-                batch.Add(ChatToUserDatabaseQueries.BindInsertChatToUser(row, preparedInsertChatToUser));
+                batch.Add(ChatToUserDatabaseQueries.BindInsertChatToUser(chatToUser, preparedInsertChatToUser));
             }
             
             await database.Session.ExecuteAsync(batch);

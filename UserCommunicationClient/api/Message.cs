@@ -10,8 +10,8 @@ namespace UserCommunicationClient.api
     {
         public Message(
             Guid id,
-            Guid fromId,
-            Guid? toId,
+            string fromId,
+            string? toId,
             Guid chatId,
             string content,
             DateTime creationTimeStamp
@@ -27,8 +27,8 @@ namespace UserCommunicationClient.api
 
 
         public Guid Id { get; }
-        public Guid FromId { get; }
-        public Guid? ToId { get; }
+        public string FromId { get; }
+        public string? ToId { get; }
         public Guid ChatId { get; }
         public string Content { get; }
         public DateTime CreationTimeStamp { get; }

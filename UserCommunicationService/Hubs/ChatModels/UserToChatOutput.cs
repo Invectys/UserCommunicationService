@@ -1,8 +1,10 @@
-﻿namespace UserCommunicationService.Hubs.ChatModels
+﻿using UserCommunicationService.database.Repositories.Chats.Models;
+
+namespace UserCommunicationService.Hubs.ChatModels
 {
     public class UserToChatOutput
     {
-        public UserToChatOutput(Guid userId, Guid chatId, int newMessagesCount)
+        public UserToChatOutput(string userId, Guid chatId, int newMessagesCount)
         {
             UserId = userId;
             ChatId = chatId;
@@ -10,8 +12,14 @@
         }
 
 
-        public Guid UserId { get; }
+        public string UserId { get; }
         public Guid ChatId { get; }
         public int NewMessagesCount { get; set; }
+
+
+        public static UserToChatOutput FromDatabase(UserToChatDatabase database, int newMessagesCount)
+        {
+            return new UserToChatOutput(database.UserId, database.ChatId, newMessagesCount);
+        }
     }
 }

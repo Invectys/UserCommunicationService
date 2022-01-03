@@ -8,7 +8,7 @@ namespace UserCommunicationService.Core.Services.Chats.ChatsModels
 {
     public class FetchChatsInputCore
     {
-        public FetchChatsInputCore(Guid userId, byte[] pagingState, int pageSize = 5)
+        public FetchChatsInputCore(string userId, byte[] pagingState, int pageSize = 5)
         {
             UserId  = userId;
             PagingState = pagingState;
@@ -17,7 +17,7 @@ namespace UserCommunicationService.Core.Services.Chats.ChatsModels
 
 
         public int PageSize { get; set; }
-        public Guid UserId { get;  }
+        public string UserId { get;  }
         public byte[] PagingState { get; }
     }
 }

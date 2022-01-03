@@ -5,7 +5,7 @@ namespace UserCommunicationClient.api
 {
     internal class SendMessageInput
     {
-        public SendMessageInput(Guid fromId, Guid? toId, Guid chatId, string content)
+        public SendMessageInput(string fromId, string? toId, Guid chatId, string content)
         {
             ToId = toId;
             FromId = fromId;
@@ -14,8 +14,8 @@ namespace UserCommunicationClient.api
         }
 
 
-        public Guid FromId { get; }
-        public Guid? ToId { get; }
+        public string FromId { get; }
+        public string? ToId { get; }
         public Guid ChatId { get; }
         public string Content { get; }
 

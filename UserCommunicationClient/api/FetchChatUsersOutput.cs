@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 
 namespace UserCommunicationClient.api
 {
-    public class FetchChatsOutput
+    public class FetchChatUsersOutput
     {
-        public FetchChatsOutput(IEnumerable<UserToChat> results, byte[] pagingState, string userId)
+        public FetchChatUsersOutput(IEnumerable<ChatToUser> results, byte[] pagingState, Guid chatId)
         {
             Results = results;
             PagingState = pagingState;
-            UserId = userId;
+            ChatId = chatId;
         }
 
 
-        public IEnumerable<UserToChat> Results { get; }
+        public IEnumerable<ChatToUser> Results { get; }
         public byte[] PagingState { get; }
-        public string UserId { get; }
+        public Guid ChatId { get; }
     }
 }

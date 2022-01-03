@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace UserCommunicationClient.api
 {
-    public class ClearChatNotificationsInput
+    public class ChatToUser
     {
-        public ClearChatNotificationsInput(Guid chatId, string userId)
+        public ChatToUser(string userId, Guid chatId)
         {
-            ChatId = chatId;
             UserId = userId;
+            ChatId = chatId;
         }
 
 
-        public Guid ChatId { get; }
         public string UserId { get; }
+        public Guid ChatId { get; }
     }
 }

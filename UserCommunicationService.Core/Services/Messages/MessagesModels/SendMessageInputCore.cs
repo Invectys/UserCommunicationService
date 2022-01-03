@@ -5,7 +5,7 @@ namespace UserCommunicationService.Core.Services.MessagesModels
 {
     public class SendMessageInputCore
     {
-        public SendMessageInputCore(Guid fromId, Guid? toId, Guid chatId, string content, DateTime creationTimeStamp)
+        public SendMessageInputCore(string fromId, string? toId, Guid chatId, string content, DateTime creationTimeStamp)
         {
             ToId = toId;
             FromId = fromId;
@@ -15,8 +15,8 @@ namespace UserCommunicationService.Core.Services.MessagesModels
         }
 
 
-        public Guid FromId { get; }
-        public Guid? ToId { get; }
+        public string FromId { get; }
+        public string? ToId { get; }
         public Guid ChatId { get; }
         public string Content { get; }
         public DateTime CreationTimeStamp { get; }
@@ -34,9 +34,9 @@ namespace UserCommunicationService.Core.Services.MessagesModels
             );
         }
 
-        public ReceiveMessageCore ToReceiveMessageCore()
+        public ReceiveMessageCore ToReceiveMessageCore(Guid guid)
         {
-            return new ReceiveMessageCore(chatId: ChatId, toId: ToId, fromId: FromId, content: Content);
+            return new ReceiveMessageCore(id: guid, chatId: ChatId, toId: ToId, fromId: FromId, content: Content, creationTimeStamp: CreationTimeStamp);
         }
     }
 }

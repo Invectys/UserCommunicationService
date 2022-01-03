@@ -8,14 +8,14 @@ namespace UserCommunicationClient.api
 {
     public class AddUserToChatInput
     {
-        public AddUserToChatInput(Guid userId, Guid chatId)
+        public AddUserToChatInput(string userId, Guid chatId)
         {
             UserId = userId;
             ChatId = chatId;
         }
 
 
-        public Guid UserId { get; }
+        public string UserId { get; }
         public Guid ChatId { get; }
     }
 }

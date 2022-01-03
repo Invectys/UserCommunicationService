@@ -9,14 +9,29 @@
         {
         }
 
-        public UserToChatDatabase(Guid userId, Guid chatId)
+        public UserToChatDatabase(
+            string userId,
+            Guid chatId, 
+            bool banned, 
+            bool notificationsEnabled,
+            string chatName,
+            string role
+            )
         {
             UserId = userId;
             ChatId = chatId;
+            Banned = banned;
+            ChatName = chatName;
+            NotificationsEnabled = notificationsEnabled;
+            Role = role;
         }
 
 
-        public Guid UserId { get; set; }
+        public string UserId { get; set; }
         public Guid ChatId { get; set; }
+        public bool Banned { get; set; }
+        public bool NotificationsEnabled { get; set; }
+        public string ChatName { get; set; }
+        public string Role { get; set; }
     }
 }

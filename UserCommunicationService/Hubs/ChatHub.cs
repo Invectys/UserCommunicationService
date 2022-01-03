@@ -1,24 +1,27 @@
-﻿using Microsoft.AspNetCore.SignalR;
-using Microsoft.Extensions.Caching.Distributed;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
 using UserCommunicationService.Controllers.MessagesModels;
+using UserCommunicationService.Core.Constants;
 using UserCommunicationService.Core.Services.Chats;
 using UserCommunicationService.Core.Services.Messages;
+using UserCommunicationService.Core.Services.Users;
 using UserCommunicationService.database.Repositories.Chats.Models;
 using UserCommunicationService.Hubs.ChatModels;
-using UserCommunicationService.Hubs.HubModels;
 
 namespace UserCommunicationService.Hubs
 {
+    [Authorize]
     public class ChatHub : Hub
     {
         public ChatHub(
             IMessagesService messagesService,
             IChatsService chatsService,
-            IDistributedCache distributedCache,
+            IUsersService usersService,
             ILogger<ChatHub> logger)
         {
             _messagesService = messagesService;
             _chatsService = chatsService;
+            _usersService = usersService;
             _logger = logger;
         }
 
@@ -26,48 +29,77 @@ namespace UserCommunicationService.Hubs
         private ILogger<ChatHub> _logger;
         private IMessagesService _messagesService;
         private IChatsService _chatsService;
-        private IDistributedCache _distributedCache;
+        private IUsersService _usersService;
 
         // user id to connections mapper
         private readonly static ConnectionMapping<string> _connections = new ConnectionMapping<string>();
 
 
-        public override Task OnConnectedAsync()
+        public override async Task OnConnectedAsync()
         {
-            return base.OnConnectedAsync();
-        }
+            var userId = Context.UserIdentifier!;
+            _connections.Add(userId, Context.ConnectionId);
 
-        public async Task InitConnectedUser(InitConnectedUserInput input)
-        {
-            _connections.Add(input.UserId.ToString(), Context.ConnectionId);
-
-            var fetch = new FetchChatsInput(userId: input.UserId, pageSize: input.MaxChats, pagingState: null);
+            // add connection to group by all chats that have
+            var fetch = new FetchChatsInput(userId: userId, pageSize: 1000000, pagingState: null);
             var page = _chatsService.FetchChats(fetch.ToCore());
             foreach (var item in page)
             {
                 await Groups.AddToGroupAsync(Context.ConnectionId, item.ChatId.ToString());
             }
+
+            await base.OnConnectedAsync();
         }
 
         public async Task CreateDialog(CreateDialogInput input)
         {
+            // fetching information about user in third part authrntication service (eg firebase or IdentityServer)
+            var fetchedUsers = await _usersService.FetchUsers(new string[] { input.FirstUserId, input.SecondUserId });
+
+            var firstUser = fetchedUsers.First(u => u.UserId == input.FirstUserId);
+            var secondUSer = fetchedUsers.First(u => u.UserId == input.SecondUserId);
+
             var chatId = Guid.NewGuid();
-            var row1 = new UserToChatDatabase(userId: input.FirstUserId, chatId: chatId);
-            var row2 = new UserToChatDatabase(userId: input.SecondUserId, chatId: chatId);
+
+            var row1 = new UserToChatDatabase(userId: input.FirstUserId, 
+                chatId: chatId, banned: false, chatName: secondUSer.PrivateChatNameWithThisUser, role: Roles.User, notificationsEnabled: true);
+
+            var row2 = new UserToChatDatabase(userId: input.SecondUserId, 
+                chatId: chatId, banned: false, chatName: firstUser.PrivateChatNameWithThisUser, role: Roles.User, notificationsEnabled: true);
+
+            // save to database
             var list = new List<UserToChatDatabase>() { row1, row2 };
             await _chatsService.AddUsersToChat(list);
 
-            await AddUserConnectionsToGroup(row1.UserId.ToString(), chatId.ToString());
-            await AddUserConnectionsToGroup(row2.UserId.ToString(), chatId.ToString());
+            // add users to chat notifications group
+            await HandleAddUserToChatNotifications(row1);
+            await HandleAddUserToChatNotifications(row2);
+        }
+
+        public async Task CreateGroupChat(CreateGroupChatInput input)
+        {
+            var chatId = Guid.NewGuid();
+            var rows = new List<UserToChatDatabase>();
+            foreach (var item in input.Users)
+            {
+                var row = new UserToChatDatabase(item, chatId, banned: false, notificationsEnabled: true, chatName: input.ChatName, role: Roles.User);
+                rows.Add(row);
+                // add users to chat notifications group
+                await HandleAddUserToChatNotifications(row);
+            }
+
+            // save to database
+            await _chatsService.AddUsersToChat(rows);
         }
 
         public async Task AddUserToChat(AddUserToChatInput input)
         {
-            var row = new UserToChatDatabase(userId: input.UserId, chatId: input.ChatId);
+            var row = new UserToChatDatabase(userId: input.UserId, chatId: input.ChatId, 
+                banned: false, notificationsEnabled: false, chatName: input.ChatName, role: Roles.User);
             var list = new List<UserToChatDatabase>() { row };
             await _chatsService.AddUsersToChat(list);
 
-            await AddUserConnectionsToGroup(input.UserId.ToString(), input.ChatId.ToString());
+            await HandleAddUserToChatNotifications(row);
         }
 
         public async Task SendMessage(SendMessageInput input)
@@ -76,12 +108,12 @@ namespace UserCommunicationService.Hubs
             var chatId = coreModel.ChatId;
 
             // save to database 
-            await _messagesService.SaveMessage(coreModel);
+            var guid = await _messagesService.SaveMessage(coreModel);
 
             // increase notifications counter (not read messages)
             await _chatsService.IncrementNotificationsCounter(chatId, coreModel.FromId);
 
-            var receiveMessage = new ReceiveMessage(coreModel.ToReceiveMessageCore());
+            var receiveMessage = new ReceiveMessage(coreModel.ToReceiveMessageCore(guid));
             await Clients.Group(chatId.ToString()).SendAsync(HubMethodsNames.NewMessageName, receiveMessage);
             
 
@@ -102,7 +134,9 @@ namespace UserCommunicationService.Hubs
 
         public async Task FetchChatUsers(FetchChatUsersInput input)
         {
-
+            var page = _chatsService.FetchChatUsers(input.ToCore());
+            var output = new FetchChatUsersOutput(page, page.PagingState, input.ChatId);
+            await Clients.Caller.SendAsync(HubMethodsNames.FetchingChatUsers, output);
         }
 
         public async Task FetchChats(FetchChatsInput input)
@@ -115,7 +149,8 @@ namespace UserCommunicationService.Hubs
             for(int i = 0; i < page.Count; i++)
             {
                 var dbChat = items[i];
-                var output = new UserToChatOutput(userId: dbChat.UserId, chatId: dbChat.ChatId, newMessagesCount: newMessagesCount[i]);
+                var newMessages = newMessagesCount[i];
+                var output = UserToChatOutput.FromDatabase(dbChat, newMessages);
                 chats.Add(output);
             }
 
@@ -123,6 +158,21 @@ namespace UserCommunicationService.Hubs
             await Clients.Caller.SendAsync(HubMethodsNames.FetchingChats, result);
         }
 
+        private async Task HandleAddUserToChatNotifications(UserToChatDatabase input)
+        {
+            await NewChatSendNotifiication(input);
+            await AddUserConnectionsToGroup(input.UserId, input.ChatId.ToString());
+        }
+
+        private async Task NewChatSendNotifiication(UserToChatDatabase input)
+        {
+            UserToChatOutput output = UserToChatOutput.FromDatabase(input, 0);
+            var firstConenctions = _connections.GetConnections(input.UserId);
+            foreach (var item in firstConenctions)
+            {
+                await Clients.Client(item).SendAsync(HubMethodsNames.NewChat, output);
+            }
+        }
 
         private async Task AddUserConnectionsToGroup(string userId, string group)
         {

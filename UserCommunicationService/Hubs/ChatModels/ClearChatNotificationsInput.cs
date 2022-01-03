@@ -2,7 +2,7 @@
 {
     public class ClearChatNotificationsInput
     {
-        public ClearChatNotificationsInput(Guid chatId, Guid userId)
+        public ClearChatNotificationsInput(Guid chatId, string userId)
         {
             ChatId = chatId;
             UserId = userId;
@@ -10,6 +10,6 @@
 
 
         public Guid ChatId { get; }
-        public Guid UserId { get; }
+        public string UserId { get; }
     }
 }

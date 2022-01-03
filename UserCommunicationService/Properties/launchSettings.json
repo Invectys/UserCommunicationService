@@ -1,4 +1,4 @@
-﻿{
+{
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
@@ -10,12 +10,12 @@
   "profiles": {
     "UserCommunicationService": {
       "commandName": "Project",
-      "dotnetRunMessages": true,
-      "launchBrowser": true,
-      "applicationUrl": "http://localhost:5203",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "GOOGLE_APPLICATION_CREDENTIALS": "C:\\Users\\qzwse\\tusanetworkv3-d6b52c01369c.json"
+      },
+      "applicationUrl": "http://localhost:5203",
+      "dotnetRunMessages": true
     },
     "IIS Express": {
       "commandName": "IISExpress",

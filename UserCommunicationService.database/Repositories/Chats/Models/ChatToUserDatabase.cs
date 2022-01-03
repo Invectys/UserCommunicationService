@@ -15,14 +15,14 @@ namespace UserCommunicationService.database.Repositories.Chats.Models
         {
         }
 
-        public ChatToUserDatabase(Guid userId, Guid chatId)
+        public ChatToUserDatabase(string userId, Guid chatId)
         {
             UserId = userId;
             ChatId = chatId;
         }
 
 
-        public Guid UserId { get; set; }
+        public string UserId { get; set; }
         public Guid ChatId { get; set; }
     }
 }

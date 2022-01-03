@@ -10,5 +10,9 @@ namespace UserCommunicationService.database.CQL
     {
         public static string UserId = "userid";
         public static string ChatId = "chatid";
+        public static string Banned = "banned";
+        public static string NotificationsEnabled = "notificationsenabled";
+        public static string ChatName = "chatname";
+        public static string Role = "role";
     }
 }

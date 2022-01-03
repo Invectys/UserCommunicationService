@@ -1,7 +1,5 @@
-using Cassandra;
-using System.Net;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using UserCommunicationService.Core.Services;
-using UserCommunicationService.database;
 using UserCommunicationService.database.Repositories;
 using UserCommunicationService.Hubs;
 
@@ -10,7 +8,58 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 
-builder.Services.AddSignalR();
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+
+    options.Authority = UsersService.Issuer;
+    options.Audience = UsersService.Audience;
+    options.Events = new JwtBearerEvents
+    {
+        OnAuthenticationFailed = context =>
+        {
+            return Task.CompletedTask;
+        },
+        OnTokenValidated = context =>
+        {
+            Console.Write("token validate");
+            return Task.CompletedTask;
+        },
+        OnMessageReceived = context =>
+        {
+            if(context.HttpContext.Request.Path.StartsWithSegments("/hubs/chat"))
+            {
+                string accessToken = context.Request.Query["access_token"];
+                Console.WriteLine("Access token = " + accessToken);
+
+                if (!string.IsNullOrEmpty(accessToken))
+                {
+                    context.Token = accessToken;
+                }
+            }
+            
+            return Task.CompletedTask;
+        }
+    };
+});
+
+
+builder.Services.AddSignalR(options => {
+    options.EnableDetailedErrors = true;
+});
+builder.Services.AddCors(options =>
+{
+
+    options.AddPolicy("DEFAULT", policy => {
+        policy.SetIsOriginAllowed(origin => new Uri(origin).IsLoopback);
+        policy.WithOrigins("http://194.67.104.187:5203").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+    });
+
+});
+
 
 
 
@@ -29,8 +78,14 @@ if (!app.Environment.IsDevelopment())
 }
 app.UseStaticFiles();
 
+
+
+
+app.UseAuthentication();
 app.UseRouting();
 app.UseAuthorization();
+
+app.UseCors("DEFAULT");
 
 app.MapRazorPages();
 

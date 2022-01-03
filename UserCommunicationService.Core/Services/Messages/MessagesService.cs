@@ -19,10 +19,12 @@ namespace UserCommunicationService.Core.Services.Messages
         private MessagesRepository _repository;
 
 
-        public async Task SaveMessage(SendMessageInputCore input)
+        public async Task<Guid> SaveMessage(SendMessageInputCore input)
         {
-            var sendMessageDatabase = input.ToDatabase(Guid.NewGuid());
+            var id = Guid.NewGuid();
+            var sendMessageDatabase = input.ToDatabase(id);
             await _repository.SaveMessage(sendMessageDatabase);
+            return id;
         }
 
         

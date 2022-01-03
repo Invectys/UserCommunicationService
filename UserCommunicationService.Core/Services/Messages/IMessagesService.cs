@@ -8,7 +8,7 @@ namespace UserCommunicationService.Core.Services.Messages
 {
     public interface IMessagesService
     {
-        Task SaveMessage(SendMessageInputCore input);
+        Task<Guid> SaveMessage(SendMessageInputCore input);
         IPage<MessageDatabase> FetchMessages(FetchMessagesInputCore input);
        
     }

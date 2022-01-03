@@ -39,13 +39,13 @@ namespace UserCommunicationService.Core.Services.Chats
             return result;
         }
 
-        public async Task AddToNotificationCount(int currentsCount, Guid chatId, Guid userId)
+        public async Task AddToNotificationCount(int currentsCount, Guid chatId, string userId)
         {
             var key = GetNewMessagesCountKey(chatId, userId);
             await _redis.Database.StringIncrementAsync(key, currentsCount);
         }
 
-        public async Task IncrementNotificationsCounter(Guid chatId, Guid senderId)
+        public async Task IncrementNotificationsCounter(Guid chatId, string senderId)
         {
             var tran = _redis.Database.CreateTransaction();
             var allUsers = FetchChatUsers(new FetchChatUsersInputCore(chatId, 1000000, null));
@@ -80,7 +80,7 @@ namespace UserCommunicationService.Core.Services.Chats
             return messagesCounts.ToArray();
         }
 
-        public async Task<int> GetChatNewMessagesCount(Guid chatId, Guid userId)
+        public async Task<int> GetChatNewMessagesCount(Guid chatId, string userId)
         {
             var key = GetNewMessagesCountKey(chatId, userId);
             var val = await _redis.Database.StringGetAsync(key);
@@ -92,14 +92,14 @@ namespace UserCommunicationService.Core.Services.Chats
             return 0;
         }
 
-        public async Task ClearChatNotifications(Guid chatId, Guid userId)
+        public async Task ClearChatNotifications(Guid chatId, string userId)
         {
             var key = GetNewMessagesCountKey(chatId, userId);
             await _redis.Database.StringSetAsync(key, "0");
         }
 
 
-        private string GetNewMessagesCountKey(Guid chatId, Guid userId)
+        private string GetNewMessagesCountKey(Guid chatId, string userId)
         {
             var key = "NEW_MESSAGES_" + chatId.ToString() + "_USER_" + userId.ToString();
             return key;

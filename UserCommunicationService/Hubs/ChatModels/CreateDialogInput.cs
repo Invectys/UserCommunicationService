@@ -2,14 +2,14 @@
 {
     public class CreateDialogInput
     {
-        public CreateDialogInput(Guid firstUserId, Guid secondUserId)
+        public CreateDialogInput(string firstUserId, string secondUserId)
         {
             FirstUserId = firstUserId;
             SecondUserId = secondUserId;
         }
 
 
-        public Guid FirstUserId { get; set; }
-        public Guid SecondUserId { get; set; }
+        public string FirstUserId { get; set; }
+        public string SecondUserId { get; set; }
     }
 }

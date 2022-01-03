@@ -8,18 +8,32 @@ namespace UserCommunicationClient.api
 {
     public class UserToChat
     {
-        public UserToChat(Guid id, Guid userId, Guid chatId, int newMessagesCount)
+        public UserToChat(
+            string userId,
+            Guid chatId,
+            bool banned,
+            bool notificationsEnabled,
+            string chatName,
+            string role,
+            int newMessagesCount
+            )
         {
-            Id = id;
             UserId = userId;
             ChatId = chatId;
+            Banned = banned;
+            ChatName = chatName;
+            NotificationsEnabled = notificationsEnabled;
+            Role = role;
             NewMessagesCount = newMessagesCount;
         }
 
 
-        public Guid Id { get; }
-        public Guid UserId { get; }
-        public Guid ChatId { get; }
-        public int NewMessagesCount { get; }
+        public string UserId { get; set; }
+        public Guid ChatId { get; set; }
+        public bool Banned { get; set; }
+        public bool NotificationsEnabled { get; set; }
+        public string ChatName { get; set; }
+        public string Role { get; set; }
+        public int NewMessagesCount { get; set; }
     }
 }

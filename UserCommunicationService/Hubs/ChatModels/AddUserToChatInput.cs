@@ -2,14 +2,16 @@
 {
     public class AddUserToChatInput
     {
-        public AddUserToChatInput(Guid userId, Guid chatId)
+        public AddUserToChatInput(string userId, Guid chatId, string chatName)
         {
             UserId = userId;
             ChatId = chatId;
+            ChatName = chatName;
         }
 
 
-        public Guid UserId { get; }
+        public string ChatName { get; set; }
+        public string UserId { get; }
         public Guid ChatId { get; }
     }
 }

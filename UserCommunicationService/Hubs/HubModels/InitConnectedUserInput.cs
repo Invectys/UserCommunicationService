@@ -2,13 +2,13 @@
 {
     public class InitConnectedUserInput
     {
-        public InitConnectedUserInput(Guid userId)
+        public InitConnectedUserInput(string userId)
         {
             UserId = userId;
         }
 
 
         public int MaxChats { get => 1000000; }
-        public Guid UserId { get; }
+        public string UserId { get; }
     }
 }

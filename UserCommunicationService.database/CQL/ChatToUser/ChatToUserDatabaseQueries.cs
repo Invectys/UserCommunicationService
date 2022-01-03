@@ -28,7 +28,7 @@ namespace UserCommunicationService.database.CQL.ChatToUser
             return statement;
         }
 
-        public static BoundStatement BindInsertChatToUser(UserToChatDatabase row, PreparedStatement insert)
+        public static BoundStatement BindInsertChatToUser(ChatToUserDatabase row, PreparedStatement insert)
         {
             return insert.Bind(row.UserId, row.ChatId);
         }
