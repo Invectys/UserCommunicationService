@@ -34,37 +34,42 @@ namespace UserCommunicationService.Core.Services
             }
 
 
-
-            var type = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS_TYPE");
-            var projectId = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS_PROJECT_ID");
-            var privateKeyId = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS_PRIVATE_KEY_ID");
-            var privateKey = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS_PRIVATE_KEY");
-            var clientEmail = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS_CLIENT_EMAIL");
-            var clientId = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS_CLIENT_ID");
-            var authUri = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS_AUTH_URI");
-            var tokenUri = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS_TOKEN_URI");
-            var authProviderX509CertUrl = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS_AUTH_PROVIDER_CERT_URL");
-            var clientX509CertUrl = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS_CLIENT_CERT_URL");
-
-            var options = new GoogleCredentialsOptions() { 
-                Type = type,
-                ProjectId = projectId,
-                PrivateKey = privateKey,
-                PrivateKeyId = privateKeyId,
-                ClientEmail = clientEmail,
-                ClientId = clientId,
-                AuthUri = authUri,
-                TokenUri = tokenUri,
-                AuthProviderX509CertUrl = authProviderX509CertUrl,
-                ClientX509RertUrl = clientX509CertUrl,
-            };
-
-            var json = JsonConvert.SerializeObject(options);
-
+            configFilePath = "volume/firebase.json";
             FirebaseApp.Create(new AppOptions()
             {
-                Credential = GoogleCredential.FromJson(json),
+                Credential = GoogleCredential.FromFile(configFilePath)
             });
+
+            //var type = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS_TYPE");
+            //var projectId = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS_PROJECT_ID");
+            //var privateKeyId = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS_PRIVATE_KEY_ID");
+            //var privateKey = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS_PRIVATE_KEY");
+            //var clientEmail = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS_CLIENT_EMAIL");
+            //var clientId = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS_CLIENT_ID");
+            //var authUri = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS_AUTH_URI");
+            //var tokenUri = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS_TOKEN_URI");
+            //var authProviderX509CertUrl = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS_AUTH_PROVIDER_CERT_URL");
+            //var clientX509CertUrl = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS_CLIENT_CERT_URL");
+
+            //var options = new GoogleCredentialsOptions() { 
+            //    Type = type,
+            //    ProjectId = projectId,
+            //    PrivateKey = privateKey,
+            //    PrivateKeyId = privateKeyId,
+            //    ClientEmail = clientEmail,
+            //    ClientId = clientId,
+            //    AuthUri = authUri,
+            //    TokenUri = tokenUri,
+            //    AuthProviderX509CertUrl = authProviderX509CertUrl,
+            //    ClientX509RertUrl = clientX509CertUrl,
+            //};
+
+            //var json = JsonConvert.SerializeObject(options);
+
+            //FirebaseApp.Create(new AppOptions()
+            //{
+            //    Credential = GoogleCredential.FromJson(json),
+            //});
         }
 
         public async Task<UserCore> FetchUser(string userId)
