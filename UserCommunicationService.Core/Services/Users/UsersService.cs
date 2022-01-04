@@ -24,7 +24,7 @@ namespace UserCommunicationService.Core.Services
             
             // load from config file
             var configFilePath = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS");
-            if(string.IsNullOrEmpty(configFilePath))
+            if(!string.IsNullOrEmpty(configFilePath))
             {
                 FirebaseApp.Create(new AppOptions()
                 {
