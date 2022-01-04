@@ -20,7 +20,7 @@ jobs:
       - run: docker rm $(docker stop $(docker ps -a -q --filter ancestor=invectys/user_communications --format="{{.ID}}")) || true
       - run: docker image rm invectys/user_communications || true
       - run: echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
-      - run: docker run -d --env-file /root/user_communication_env.list -p 5023:80 invectys/user_communications 
+      - run: docker run -d --env-file /opt/circleci/user_communication_env.list -p 5023:80 invectys/user_communications 
 
          
 
