@@ -53,18 +53,21 @@ namespace UserCommunicationService.Hubs
 
         public async Task CreateDialog(CreateDialogInput input)
         {
-            // fetching information about user in third part authrntication service (eg firebase or IdentityServer)
-            var fetchedUsers = await _usersService.FetchUsers(new string[] { input.FirstUserId, input.SecondUserId });
+            var firstUserId = Context.UserIdentifier!;
+            var secondUserId = input.UserId;
 
-            var firstUser = fetchedUsers.First(u => u.UserId == input.FirstUserId);
-            var secondUSer = fetchedUsers.First(u => u.UserId == input.SecondUserId);
+            // fetching information about user in third part authrntication service (eg firebase or IdentityServer)
+            var fetchedUsers = await _usersService.FetchUsers(new string[] { firstUserId, secondUserId });
+
+            var firstUser = fetchedUsers.First(u => u.UserId == firstUserId);
+            var secondUSer = fetchedUsers.First(u => u.UserId == secondUserId);
 
             var chatId = Guid.NewGuid();
 
-            var row1 = new UserToChatDatabase(userId: input.FirstUserId, 
+            var row1 = new UserToChatDatabase(userId: firstUserId, 
                 chatId: chatId, banned: false, chatName: secondUSer.PrivateChatNameWithThisUser, role: Roles.User, notificationsEnabled: true);
 
-            var row2 = new UserToChatDatabase(userId: input.SecondUserId, 
+            var row2 = new UserToChatDatabase(userId: secondUserId, 
                 chatId: chatId, banned: false, chatName: firstUser.PrivateChatNameWithThisUser, role: Roles.User, notificationsEnabled: true);
 
             // save to database
@@ -74,6 +77,9 @@ namespace UserCommunicationService.Hubs
             // add users to chat notifications group
             await HandleAddUserToChatNotifications(row1);
             await HandleAddUserToChatNotifications(row2);
+
+            var output = new ByMeCreatedDialogWithUser(userId: secondUserId, chatId: chatId);
+            await Clients.Caller.SendAsync("ByMeCreatedDialogWithUser", output);
         }
 
         public async Task CreateGroupChat(CreateGroupChatInput input)
