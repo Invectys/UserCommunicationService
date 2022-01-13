@@ -4,22 +4,29 @@ namespace UserCommunicationService.Hubs.ChatModels
 {
     public class UserToChatOutput
     {
-        public UserToChatOutput(string userId, Guid chatId, int newMessagesCount)
+        public UserToChatOutput(string userId, Guid chatId, int newMessagesCount, string chatName, bool notificationsEnabled, bool banned)
         {
             UserId = userId;
             ChatId = chatId;
             NewMessagesCount = newMessagesCount;
+            ChatName = chatName;
+            NotificationsEnabled = notificationsEnabled;
+            Banned = banned;
         }
 
 
         public string UserId { get; }
         public Guid ChatId { get; }
         public int NewMessagesCount { get; set; }
-
+        public string ChatName { get; set; }
+        public bool NotificationsEnabled { get; set; }
+        public bool Banned { get; set; }
 
         public static UserToChatOutput FromDatabase(UserToChatDatabase database, int newMessagesCount)
         {
-            return new UserToChatOutput(database.UserId, database.ChatId, newMessagesCount);
+            return new UserToChatOutput(database.UserId, database.ChatId, 
+                newMessagesCount: newMessagesCount, chatName: database.ChatName, 
+                notificationsEnabled: database.NotificationsEnabled, banned: database.Banned);
         }
     }
 }

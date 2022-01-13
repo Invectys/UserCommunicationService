@@ -10,8 +10,11 @@ namespace UserCommunicationService.Core.Services
     {
         public UsersService()
         {
-            _usersServcieApi = new UsersServiceApi("http://194.67.104.187:5022/");
+            _usersServcieApi = new UsersServiceApi(UsersServiceLocalApi);
         }
+
+        public const string UsersServiceLocalApi = "http://localhost:5130/";
+        public const string UsersServiceProdApi = "http://194.67.104.187:5022/";
 
         public const string ProjectId = "tusanetworkv3";
         public const string Audience = ProjectId;
