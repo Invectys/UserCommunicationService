@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="FirebaseAdmin" Version="2.2.0" />
+    <PackageReference Include="Invectys.UsersService.Client" Version="1.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Core" Version="1.1.0" />
     <PackageReference Include="StackExchange.Redis" Version="2.2.88" />
   </ItemGroup>

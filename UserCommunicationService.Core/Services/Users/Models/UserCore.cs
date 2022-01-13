@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Invectys.UsersService.Client.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,14 @@ namespace UserCommunicationService.Core.Services.Users.Models
             MessageDisplayName = messageDisplayName;
             PhoneNumber = phoneNumber;
             UserId = userId;
+        }
+
+        public UserCore(User fromUsersServiceUser)
+        {
+            PrivateChatNameWithThisUser = fromUsersServiceUser.Nickname;
+            MessageDisplayName = fromUsersServiceUser.Nickname;
+            PhoneNumber = "hiden";
+            UserId = fromUsersServiceUser.Id;
         }
 
 

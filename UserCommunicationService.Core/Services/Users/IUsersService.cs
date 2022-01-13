@@ -9,8 +9,6 @@ namespace UserCommunicationService.Core.Services.Users
 {
     public interface IUsersService
     {
-        void Initialize();
         Task<UserCore[]> FetchUsers(string[] userIds);
-        Task<UserCore> FetchUser(string userId);
     }
 }

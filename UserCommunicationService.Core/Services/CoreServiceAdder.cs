@@ -13,9 +13,7 @@ namespace UserCommunicationService.Core.Services
             collection.AddSingleton(new DatabaseBuilder().BuildDatabase());
             collection.AddSingleton(new RedisBuilder().BuildRedis());
 
-            var usersService = new UsersService();
-            usersService.Initialize();
-            collection.AddSingleton<IUsersService>(usersService);
+            collection.AddSingleton<IUsersService, UsersService>();
 
             collection.AddSingleton<IMessagesService, MessagesService>();
             collection.AddSingleton<IChatsService, ChatsService>();
