@@ -10,7 +10,7 @@ namespace UserCommunicationService.Core.Services
     {
         public UsersService()
         {
-            _usersServcieApi = new UsersServiceApi(UsersServiceLocalApi);
+            _usersServcieApi = new UsersServiceApi(UsersServiceProdApi);
         }
 
         public const string UsersServiceLocalApi = "http://localhost:5022/";
