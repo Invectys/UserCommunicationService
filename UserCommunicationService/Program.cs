@@ -57,6 +57,7 @@ builder.Services.AddCors(options =>
         policy.SetIsOriginAllowed(origin => new Uri(origin).IsLoopback);
         policy.WithOrigins("https://tusa.uno").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
         policy.WithOrigins("https://tusanetworkv3.web.app").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+        policy.SetIsOriginAllowed(origin => origin.Contains("tusa"));
     });
 
 });
