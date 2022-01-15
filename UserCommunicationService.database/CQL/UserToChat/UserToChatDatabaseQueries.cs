@@ -11,11 +11,16 @@ namespace UserCommunicationService.database.CQL
             $"{UserToChatDatabaseColumnNames.NotificationsEnabled}, " +
             $"{UserToChatDatabaseColumnNames.ChatName}, " +
             $"{UserToChatDatabaseColumnNames.Role}, " +
+            $"{UserToChatDatabaseColumnNames.Avatar}, " +
             $"{UserToChatDatabaseColumnNames.ChatId}) ";
 
-        public readonly static string InsertPreparRowQuery = $"INSERT INTO {Constants.UserToChatTableName} {valueBloc} VALUES (?, ?, ?, ?, ?, ?);";
+        public readonly static string InsertPreparRowQuery = $"INSERT INTO {Constants.UserToChatTableName} {valueBloc} VALUES (?, ?, ?, ?, ?, ?, ?);";
 
-        
+        public static string GetUpdateUserToChatByUser(string userId, string chatId)
+        {
+            return $"UPDATE {Constants.UserToChatTableName} SET {UserToChatDatabaseColumnNames.NotificationsEnabled}=?, {UserToChatDatabaseColumnNames.ChatName}=?, {UserToChatDatabaseColumnNames.Avatar}=? WHERE {UserToChatDatabaseColumnNames.UserId}='{userId}' and {UserToChatDatabaseColumnNames.ChatId}={chatId};";
+        }
+
         public static string GetSelectQuery(string userId)
         {
             var queryStr = $"SELECT * FROM {Constants.UserToChatTableName} WHERE {UserToChatDatabaseColumnNames.UserId} = '{userId}'";
@@ -30,7 +35,7 @@ namespace UserCommunicationService.database.CQL
 
         public static BoundStatement BindInsertUserToChat(UserToChatDatabase row, PreparedStatement insert)
         {
-            return insert.Bind(row.UserId, row.Banned, row.NotificationsEnabled, row.ChatName, row.Role, row.ChatId);
+            return insert.Bind(row.UserId, row.Banned, row.NotificationsEnabled, row.ChatName, row.Role, row.Avatar, row.ChatId);
         }
     }
 }

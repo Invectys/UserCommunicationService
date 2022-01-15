@@ -98,11 +98,18 @@ namespace UserCommunicationService.Core.Services.Chats
             await _redis.Database.StringSetAsync(key, "0");
         }
 
+        public async Task UpdateUserToChat(UpdateUserToChatCore update)
+        {
+            await _chatsRepository.UpdateUserToChatByUser(update);
+        }
+
 
         private string GetNewMessagesCountKey(Guid chatId, string userId)
         {
             var key = "NEW_MESSAGES_" + chatId.ToString() + "_USER_" + userId.ToString();
             return key;
         }
+
+        
     }
 }

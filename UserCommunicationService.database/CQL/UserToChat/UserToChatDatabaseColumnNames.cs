@@ -14,5 +14,6 @@ namespace UserCommunicationService.database.CQL
         public static string NotificationsEnabled = "notificationsenabled";
         public static string ChatName = "chatname";
         public static string Role = "role";
+        public static string Avatar = "avatar";
     }
 }

@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Invectys.media;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using UserCommunicationService.Controllers.MessagesModels;
 using UserCommunicationService.Core.Constants;
 using UserCommunicationService.Core.Services.Chats;
+using UserCommunicationService.Core.Services.Chats.ChatsModels;
 using UserCommunicationService.Core.Services.Messages;
 using UserCommunicationService.Core.Services.Users;
 using UserCommunicationService.database.Repositories.Chats.Models;
@@ -60,15 +62,21 @@ namespace UserCommunicationService.Hubs
             var fetchedUsers = await _usersService.FetchUsers(new string[] { firstUserId, secondUserId });
 
             var firstUser = fetchedUsers.First(u => u.UserId == firstUserId);
-            var secondUSer = fetchedUsers.First(u => u.UserId == secondUserId);
-
+            var secondUser = fetchedUsers.First(u => u.UserId == secondUserId);
+            
             var chatId = Guid.NewGuid();
 
+            var avatar1 = secondUser.Avatar;
             var row1 = new UserToChatDatabase(userId: firstUserId, 
-                chatId: chatId, banned: false, chatName: secondUSer.PrivateChatNameWithThisUser, role: Roles.User, notificationsEnabled: true);
+                chatId: chatId, banned: false, 
+                chatName: secondUser.PrivateChatNameWithThisUser, role: Roles.User, notificationsEnabled: true, 
+                avatar: avatar1);
 
+            var avatar2 = firstUser.Avatar;
             var row2 = new UserToChatDatabase(userId: secondUserId, 
-                chatId: chatId, banned: false, chatName: firstUser.PrivateChatNameWithThisUser, role: Roles.User, notificationsEnabled: true);
+                chatId: chatId, banned: false, 
+                chatName: firstUser.PrivateChatNameWithThisUser, role: Roles.User, 
+                notificationsEnabled: true, avatar: avatar2);
 
             // save to database
             var list = new List<UserToChatDatabase>() { row1, row2 };
@@ -88,7 +96,7 @@ namespace UserCommunicationService.Hubs
             var rows = new List<UserToChatDatabase>();
             foreach (var item in input.Users)
             {
-                var row = new UserToChatDatabase(item, chatId, banned: false, notificationsEnabled: true, chatName: input.ChatName, role: Roles.User);
+                var row = new UserToChatDatabase(item, chatId, banned: false, notificationsEnabled: true, chatName: input.ChatName, role: Roles.User, avatar: new InvectysMedia(isAsset: true, mediaId: "DEFAULT", type: InvectysMedia.ImageType));
                 rows.Add(row);
                 // add users to chat notifications group
                 await HandleAddUserToChatNotifications(row);
@@ -101,7 +109,8 @@ namespace UserCommunicationService.Hubs
         public async Task AddUserToChat(AddUserToChatInput input)
         {
             var row = new UserToChatDatabase(userId: input.UserId, chatId: input.ChatId, 
-                banned: false, notificationsEnabled: false, chatName: input.ChatName, role: Roles.User);
+                banned: false, notificationsEnabled: false, chatName: input.ChatName, role: Roles.User,
+                avatar: new InvectysMedia(isAsset: true, mediaId: "DEFAULT", type: InvectysMedia.ImageType));
             var list = new List<UserToChatDatabase>() { row };
             await _chatsService.AddUsersToChat(list);
 
@@ -124,6 +133,13 @@ namespace UserCommunicationService.Hubs
             
 
             _logger.LogInformation($"Sending message {input.FromId} to {input.ToId} content: {input.Content}");
+        }
+
+        public async Task UpdateUserToChat(UpdateUserToChat update)
+        {
+            var userId = Context.UserIdentifier!;
+            var core = update.ToCore(userId);
+            await _chatsService.UpdateUserToChat(core);
         }
 
         public async Task ClearChatNotifications(ClearChatNotificationsInput input)

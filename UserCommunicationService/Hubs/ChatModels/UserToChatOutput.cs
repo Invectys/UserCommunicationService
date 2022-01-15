@@ -1,10 +1,12 @@
-﻿using UserCommunicationService.database.Repositories.Chats.Models;
+﻿using Invectys.media;
+using UserCommunicationService.database.Repositories.Chats.Models;
 
 namespace UserCommunicationService.Hubs.ChatModels
 {
     public class UserToChatOutput
     {
-        public UserToChatOutput(string userId, Guid chatId, int newMessagesCount, string chatName, bool notificationsEnabled, bool banned)
+        public UserToChatOutput(string userId, Guid chatId, int newMessagesCount, string chatName,
+            bool notificationsEnabled, bool banned, InvectysMedia avatar)
         {
             UserId = userId;
             ChatId = chatId;
@@ -12,6 +14,7 @@ namespace UserCommunicationService.Hubs.ChatModels
             ChatName = chatName;
             NotificationsEnabled = notificationsEnabled;
             Banned = banned;
+            Avatar = avatar;
         }
 
 
@@ -21,12 +24,13 @@ namespace UserCommunicationService.Hubs.ChatModels
         public string ChatName { get; set; }
         public bool NotificationsEnabled { get; set; }
         public bool Banned { get; set; }
+        public InvectysMedia Avatar { get; set; }
 
         public static UserToChatOutput FromDatabase(UserToChatDatabase database, int newMessagesCount)
         {
             return new UserToChatOutput(database.UserId, database.ChatId, 
                 newMessagesCount: newMessagesCount, chatName: database.ChatName, 
-                notificationsEnabled: database.NotificationsEnabled, banned: database.Banned);
+                notificationsEnabled: database.NotificationsEnabled, banned: database.Banned, avatar: database.Avatar);
         }
     }
 }

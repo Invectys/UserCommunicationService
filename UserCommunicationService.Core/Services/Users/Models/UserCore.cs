@@ -1,4 +1,5 @@
-﻿using Invectys.UsersService.Client.Models;
+﻿using Invectys.media;
+using Invectys.UsersService.Client.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,7 @@ namespace UserCommunicationService.Core.Services.Users.Models
             MessageDisplayName = fromUsersServiceUser.Nickname;
             PhoneNumber = "hiden";
             UserId = fromUsersServiceUser.Id;
+            Avatar = fromUsersServiceUser.Avatar;
         }
 
 
@@ -30,5 +32,6 @@ namespace UserCommunicationService.Core.Services.Users.Models
         public string PrivateChatNameWithThisUser { get; }
         public string MessageDisplayName { get; }
         public string PhoneNumber { get; }
+        public InvectysMedia Avatar { get; set; }
     }
 }

@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="CassandraCSharpDriver" Version="3.17.1" />
+    <PackageReference Include="Invectys.media" Version="1.0.0" />
     <PackageReference Include="NLog.Extensions.Logging" Version="1.7.4" />
   </ItemGroup>
 

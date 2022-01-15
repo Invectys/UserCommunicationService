@@ -47,6 +47,12 @@ namespace UserCommunicationService.database.Repositories.Chats
             return page;
         }
 
-       
+        public async Task UpdateUserToChatByUser(UpdateUserToChatCore update)
+        {
+            var query = UserToChatDatabaseQueries.GetUpdateUserToChatByUser(update.UserId, update.ChatId.ToString());
+            var prepare = database.Session.Prepare(query);
+            var statement = prepare.Bind(update.NotificationsEnabled, update.ChatName, update.Avatar);
+            var result = await database.Session.ExecuteAsync(statement);
+        }
     }
 }

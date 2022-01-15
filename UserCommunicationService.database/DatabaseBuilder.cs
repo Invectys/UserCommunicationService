@@ -1,4 +1,5 @@
 ﻿using Cassandra;
+using Invectys.media;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -55,6 +56,15 @@ namespace UserCommunicationService.database
             _session.Execute(CreateDatabaseQueries.CreateKeyspaceCQL);
 
             _session.ChangeKeyspace(Constants.KeyspaceName);
+
+            // create media user defineded type
+            _session.Execute(CreateDatabaseQueries.CreateInvectysMediaUserDefinedType);
+            _session.UserDefinedTypes.Define(
+                UdtMap.For<InvectysMedia>()
+                    .Map(a => a.Type, "type")
+                    .Map(a => a.MediaId, "mediaid")
+                    .Map(a => a.IsAsset, "isasset")
+            );
 
             // User to user messages table creation
             _session.Execute(CreateDatabaseQueries.CreateMessagesTableCQL);

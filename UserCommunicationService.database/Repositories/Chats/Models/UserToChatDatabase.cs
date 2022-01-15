@@ -1,4 +1,6 @@
-﻿namespace UserCommunicationService.database.Repositories.Chats.Models
+﻿using Invectys.media;
+
+namespace UserCommunicationService.database.Repositories.Chats.Models
 {
     public class UserToChatDatabase
     {
@@ -15,7 +17,8 @@
             bool banned, 
             bool notificationsEnabled,
             string chatName,
-            string role
+            string role,
+            InvectysMedia avatar
             )
         {
             UserId = userId;
@@ -24,6 +27,7 @@
             ChatName = chatName;
             NotificationsEnabled = notificationsEnabled;
             Role = role;
+            Avatar = avatar;
         }
 
 
@@ -33,5 +37,6 @@
         public bool NotificationsEnabled { get; set; }
         public string ChatName { get; set; }
         public string Role { get; set; }
+        public InvectysMedia Avatar { get; set; }
     }
 }

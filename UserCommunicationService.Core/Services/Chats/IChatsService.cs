@@ -16,5 +16,6 @@ namespace UserCommunicationService.Core.Services.Chats
         Task<int> GetChatNewMessagesCount(Guid chatId, string userId);
         Task ClearChatNotifications(Guid chatId, string userId);
         Task<int[]> GetChatsNewMessagesCount(IEnumerable<UserToChatDatabase> chats);
+        Task UpdateUserToChat(UpdateUserToChatCore update);
     }
 }
