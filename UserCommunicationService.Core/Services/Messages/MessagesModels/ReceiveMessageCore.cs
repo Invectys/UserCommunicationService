@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Invectys.media;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ namespace UserCommunicationService.Core.Services.Messages.MessagesModels
 {
     public class ReceiveMessageCore
     {
-        public ReceiveMessageCore(Guid id, string fromId, string? toId, Guid chatId, string content, DateTime creationTimeStamp)
+        public ReceiveMessageCore(Guid id, string fromId, string? toId, Guid chatId, string content, DateTime creationTimeStamp, List<InvectysMedia> files)
         {
             Id = id;
             ToId = toId;
@@ -16,6 +17,7 @@ namespace UserCommunicationService.Core.Services.Messages.MessagesModels
             Content = content;
             ChatId = chatId;
             CreationTimeStamp = creationTimeStamp;
+            Files = files;
         }
 
         public Guid Id { get; }
@@ -23,6 +25,7 @@ namespace UserCommunicationService.Core.Services.Messages.MessagesModels
         public string? ToId { get; }
         public Guid ChatId { get; }
         public string Content { get; }
+        public List<InvectysMedia> Files { get; }
         public DateTime CreationTimeStamp { get; }
     }
 }

@@ -11,16 +11,17 @@ namespace UserCommunicationService.database.CQL
             $"{MessageDatabaseColumnNames.FromIdName}, " +
             $"{MessageDatabaseColumnNames.ToIdName}, " +
             $"{MessageDatabaseColumnNames.ContentName}, " +
+            $"{MessageDatabaseColumnNames.FilesName}, " +
             $"{MessageDatabaseColumnNames.CreationTimestampName})";
 
-        public readonly static string InsertPrepareMessageQuery = $"INSERT INTO {Constants.MessagesTableName} {_messageValueBloc} VALUES (?, ?, ?, ?, ?, ?);";
+        public readonly static string InsertPrepareMessageQuery = $"INSERT INTO {Constants.MessagesTableName} {_messageValueBloc} VALUES (?, ?, ?, ?, ?, ?, ?);";
 
         public readonly static string SelectFromChat = $"SELECT * FROM {Constants.MessagesTableName} WHERE {MessageDatabaseColumnNames.ChatIdName} = ?";
 
         public static BoundStatement BindInsert(ISession session, MessageDatabase message)
         {
             var preparedInsert = session.Prepare(InsertPrepareMessageQuery);
-            var statement = preparedInsert.Bind(message.Id, message.ChatId, message.FromId, message.ToId, message.Content, message.CreationTimeStamp);
+            var statement = preparedInsert.Bind(message.Id, message.ChatId, message.FromId, message.ToId, message.Content, message.Files, message.CreationTimeStamp);
             return statement;
         }
 

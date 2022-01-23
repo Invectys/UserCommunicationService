@@ -1,17 +1,19 @@
-﻿using UserCommunicationService.Core.Services.Messages.MessagesModels;
+﻿using Invectys.media;
+using UserCommunicationService.Core.Services.Messages.MessagesModels;
 using UserCommunicationService.database.Repositories.Messages.MessagesModels;
 
 namespace UserCommunicationService.Core.Services.MessagesModels
 {
     public class SendMessageInputCore
     {
-        public SendMessageInputCore(string fromId, string? toId, Guid chatId, string content, DateTime creationTimeStamp)
+        public SendMessageInputCore(string fromId, string? toId, Guid chatId, string content, DateTime creationTimeStamp, List<InvectysMedia> files)
         {
             ToId = toId;
             FromId = fromId;
             Content = content;
             CreationTimeStamp = creationTimeStamp;
             ChatId = chatId;
+            Files = files;
         }
 
 
@@ -19,6 +21,7 @@ namespace UserCommunicationService.Core.Services.MessagesModels
         public string? ToId { get; }
         public Guid ChatId { get; }
         public string Content { get; }
+        public List<InvectysMedia> Files { get; set; }
         public DateTime CreationTimeStamp { get; }
 
 
@@ -30,13 +33,14 @@ namespace UserCommunicationService.Core.Services.MessagesModels
                 fromId: FromId,
                 chatId: ChatId, 
                 content: Content,
-                creationTimeStamp: CreationTimeStamp
+                creationTimeStamp: CreationTimeStamp,
+                files: Files
             );
         }
 
         public ReceiveMessageCore ToReceiveMessageCore(Guid guid)
         {
-            return new ReceiveMessageCore(id: guid, chatId: ChatId, toId: ToId, fromId: FromId, content: Content, creationTimeStamp: CreationTimeStamp);
+            return new ReceiveMessageCore(id: guid, chatId: ChatId, toId: ToId, fromId: FromId, content: Content, creationTimeStamp: CreationTimeStamp, files: Files);
         }
     }
 }

@@ -33,6 +33,15 @@ builder.Services.AddAuthentication(options =>
             if(context.HttpContext.Request.Path.StartsWithSegments("/hubs/chat"))
             {
                 string accessToken = context.Request.Query["access_token"];
+                if(string.IsNullOrEmpty(accessToken))
+                {
+                    var authorizationHeader = context.Request.Headers.Authorization[0];
+                    if(!string.IsNullOrEmpty(authorizationHeader))
+                    {
+                        accessToken = authorizationHeader.Replace("Bearer ", "");
+                    }
+                    
+                }
                 Console.WriteLine("Access token = " + accessToken);
 
                 if (!string.IsNullOrEmpty(accessToken))

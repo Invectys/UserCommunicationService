@@ -14,7 +14,7 @@ namespace UserCommunicationService.database.CQL
 
 
         public static string CreateMessagesTableCQL = $"CREATE TABLE IF NOT EXISTS {Constants.MessagesTableName} ({MessageDatabaseColumnNames.IdName} uuid, " +
-            $"{MessageDatabaseColumnNames.ChatIdName} uuid,{MessageDatabaseColumnNames.FromIdName} varchar, {MessageDatabaseColumnNames.ToIdName} varchar, {MessageDatabaseColumnNames.ContentName} text, {MessageDatabaseColumnNames.CreationTimestampName} timestamp, PRIMARY KEY ({MessageDatabaseColumnNames.ChatIdName}, {MessageDatabaseColumnNames.CreationTimestampName}) ) WITH CLUSTERING ORDER BY ({MessageDatabaseColumnNames.CreationTimestampName} DESC);";
+            $"{MessageDatabaseColumnNames.ChatIdName} uuid,{MessageDatabaseColumnNames.FromIdName} varchar, {MessageDatabaseColumnNames.ToIdName} varchar, {MessageDatabaseColumnNames.ContentName} text, {MessageDatabaseColumnNames.FilesName} list<frozen<invectysmedia>>, {MessageDatabaseColumnNames.CreationTimestampName} timestamp, PRIMARY KEY ({MessageDatabaseColumnNames.ChatIdName}, {MessageDatabaseColumnNames.CreationTimestampName}) ) WITH CLUSTERING ORDER BY ({MessageDatabaseColumnNames.CreationTimestampName} DESC);";
 
 
         public const string CreateInvectysMediaUserDefinedType = $"CREATE TYPE IF NOT EXISTS invectysmedia (isasset boolean, mediaid varchar, type varchar);";

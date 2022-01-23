@@ -14,5 +14,6 @@ namespace UserCommunicationService.database.CQL
         public static string ChatIdName = "chatid";
         public static string ContentName = "content";
         public static string CreationTimestampName = "creationtimestamp";
+        public static string FilesName = "files";
     }
 }

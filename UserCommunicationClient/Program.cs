@@ -1,4 +1,7 @@
 ﻿
+using FirebaseAdmin;
+using FirebaseAdmin.Auth;
+using Google.Apis.Auth.OAuth2;
 using System.Text.RegularExpressions;
 using UserCommunicationClient;
 
@@ -10,28 +13,27 @@ using UserCommunicationClient;
 
 Console.WriteLine("Start User communication client");
 
+Console.ReadLine();
 
-string uid = "";
+string uid = "iSDoG08pR0R5aenhDVlLAoJmSxz1";
 
-while(string.IsNullOrEmpty(uid))
+var configFilePath = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS");
+if (!string.IsNullOrEmpty(configFilePath))
 {
-    Console.WriteLine("Examples");
-    Console.WriteLine("28dafc00-757b-4c89-89a8-5eceb8d7e000");
-    Console.WriteLine("28dafc00-757b-4c89-89a8-5eceb8d7e111");
-    Console.WriteLine("28dafc00-757b-4c89-89a8-5eceb8d7e222");
-    Console.WriteLine("28dafc00-757b-4c89-89a8-5eceb8d7e333");
-    Console.WriteLine("28dafc00-757b-4c89-89a8-5eceb8d7e444");
-    Console.WriteLine("Input your uid");
-
-    uid = Console.ReadLine();
+    FirebaseApp.Create(new AppOptions()
+    {
+        Credential = GoogleCredential.FromFile(configFilePath)
+    });
 }
 
+var token = await FirebaseAuth.DefaultInstance.CreateCustomTokenAsync(uid);
 
-var debugUrl = "http://localhost:5203/hubs/chat";
+
+var debugUrl = "http://localhost:5023/hubs/chat";
 var prodUrl = "http://194.67.104.187:5023/hubs/chat";
 
 
-var chatApi = new ChatApi(debugUrl, uid);
+var chatApi = new ChatApi(debugUrl, uid, token);
 await chatApi.Init();
 
 Console.WriteLine("What do u want to do ?");
@@ -82,7 +84,7 @@ while (true)
     if(GetCommand() == "DEBUG")
     {
         await chatApi.Stop();
-        chatApi = new ChatApi(debugUrl, uid);
+        chatApi = new ChatApi(debugUrl, uid, token);
         await chatApi.Init();
         continue;
     }

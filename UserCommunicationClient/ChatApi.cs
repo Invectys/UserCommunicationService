@@ -6,13 +6,14 @@ namespace UserCommunicationClient
 {
     public class ChatApi
     {
-        public ChatApi(string chatHubUrl, string uid)
+        public ChatApi(string chatHubUrl, string uid, string token)
         {
             _chatHubUrl = chatHubUrl;
             _uid = uid;
+            _token = token;
         }
 
-        private string? token = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjFkMmE2YTZhNDcyYWNhNjNmM2FmNzU2NjIxZjM0Njg2OTI1YjUxYTgiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vdHVzYW5ldHdvcmt2MyIsImF1ZCI6InR1c2FuZXR3b3JrdjMiLCJhdXRoX3RpbWUiOjE2NDEyMjIwNzQsInVzZXJfaWQiOiJYQ1dtQm5VN1VxUzFtZ1V5b2lmUTVEcWlkVXMyIiwic3ViIjoiWENXbUJuVTdVcVMxbWdVeW9pZlE1RHFpZFVzMiIsImlhdCI6MTY0MTIyMjA3NCwiZXhwIjoxNjQxMjI1Njc0LCJwaG9uZV9udW1iZXIiOiIrNzk3Nzc3Nzc3NzciLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7InBob25lIjpbIis3OTc3Nzc3Nzc3NyJdfSwic2lnbl9pbl9wcm92aWRlciI6InBob25lIn19.PCYr_YWj1ha5L2xUAoqYI-eKWlYHmtEVgfTrAyv6SjD3lMql4vHMLQSltveGq05UBDG43ksAV-u44G4N2Q45rJcCgBjzDHMj_Btg08WHwloz0mk2kl0rSWwg_KDVLj7JqysYqhrLzxEQ8KgrjP2o4gTQtALxyVrIagyzWvicqCttjpkZ4S0a86Gi9wygzDIUM9zEji0BmUKRKAYPps2Hq3Ttni91maRGDu015wXv3FMnPgXX1XWkUP7MUVIsdyCne_xSOIxwvHPjtwnpD_QT25xP1sMlzlhsE2thw-LjcpSVXGucE3_nCPsaCiICjPb0oF9cp9zW0NttXce502077Q";
+        private string? _token = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjFkMmE2YTZhNDcyYWNhNjNmM2FmNzU2NjIxZjM0Njg2OTI1YjUxYTgiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vdHVzYW5ldHdvcmt2MyIsImF1ZCI6InR1c2FuZXR3b3JrdjMiLCJhdXRoX3RpbWUiOjE2NDEyMjIwNzQsInVzZXJfaWQiOiJYQ1dtQm5VN1VxUzFtZ1V5b2lmUTVEcWlkVXMyIiwic3ViIjoiWENXbUJuVTdVcVMxbWdVeW9pZlE1RHFpZFVzMiIsImlhdCI6MTY0MTIyMjA3NCwiZXhwIjoxNjQxMjI1Njc0LCJwaG9uZV9udW1iZXIiOiIrNzk3Nzc3Nzc3NzciLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7InBob25lIjpbIis3OTc3Nzc3Nzc3NyJdfSwic2lnbl9pbl9wcm92aWRlciI6InBob25lIn19.PCYr_YWj1ha5L2xUAoqYI-eKWlYHmtEVgfTrAyv6SjD3lMql4vHMLQSltveGq05UBDG43ksAV-u44G4N2Q45rJcCgBjzDHMj_Btg08WHwloz0mk2kl0rSWwg_KDVLj7JqysYqhrLzxEQ8KgrjP2o4gTQtALxyVrIagyzWvicqCttjpkZ4S0a86Gi9wygzDIUM9zEji0BmUKRKAYPps2Hq3Ttni91maRGDu015wXv3FMnPgXX1XWkUP7MUVIsdyCne_xSOIxwvHPjtwnpD_QT25xP1sMlzlhsE2thw-LjcpSVXGucE3_nCPsaCiICjPb0oF9cp9zW0NttXce502077Q";
 
         private HubConnection _connection;
         private string _chatHubUrl;
@@ -88,7 +89,9 @@ namespace UserCommunicationClient
             _connection = new HubConnectionBuilder()
             .WithUrl(_chatHubUrl, options =>
             {
-                options.AccessTokenProvider = () => Task.Run(() => token);
+                options.Transports = HttpTransportType.WebSockets;
+                options.SkipNegotiation = true;
+                options.AccessTokenProvider = () => Task.Run(() => _token);
             })
             .Build();
         }

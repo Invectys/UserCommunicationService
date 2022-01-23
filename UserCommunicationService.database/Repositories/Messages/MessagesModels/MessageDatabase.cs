@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Invectys.media;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,7 +23,9 @@ namespace UserCommunicationService.database.Repositories.Messages.MessagesModels
             string? toId, 
             Guid chatId, 
             string content,
-            DateTime creationTimeStamp)
+            DateTime creationTimeStamp,
+            List<InvectysMedia> files
+            )
         {
             ToId = toId;
             FromId = fromId;
@@ -30,6 +33,7 @@ namespace UserCommunicationService.database.Repositories.Messages.MessagesModels
             CreationTimeStamp = creationTimeStamp;
             ChatId = chatId;
             Id = id;
+            Files = files;
         }
 
 
@@ -39,5 +43,6 @@ namespace UserCommunicationService.database.Repositories.Messages.MessagesModels
         public Guid ChatId { get; set; }
         public string Content { get; set; }
         public DateTime CreationTimeStamp { get; set; }
+        public List<InvectysMedia> Files { get; set; }
     }
 }
