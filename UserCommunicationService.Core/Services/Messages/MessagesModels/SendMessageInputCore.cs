@@ -38,9 +38,11 @@ namespace UserCommunicationService.Core.Services.MessagesModels
             );
         }
 
-        public ReceiveMessageCore ToReceiveMessageCore(Guid guid)
+        public ReceiveMessageCore ToReceiveMessageCore(Guid guid, string displayName, InvectysMedia media)
         {
-            return new ReceiveMessageCore(id: guid, chatId: ChatId, toId: ToId, fromId: FromId, content: Content, creationTimeStamp: CreationTimeStamp, files: Files);
+            return new ReceiveMessageCore(id: guid, 
+                chatId: ChatId, toId: ToId, fromId: FromId,
+                content: Content, creationTimeStamp: CreationTimeStamp, files: Files, displayName: displayName, displayMedia: media);
         }
     }
 }

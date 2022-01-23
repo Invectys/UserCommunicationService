@@ -9,7 +9,9 @@ namespace UserCommunicationService.Core.Services.Messages.MessagesModels
 {
     public class ReceiveMessageCore
     {
-        public ReceiveMessageCore(Guid id, string fromId, string? toId, Guid chatId, string content, DateTime creationTimeStamp, List<InvectysMedia> files)
+        public ReceiveMessageCore(Guid id, string fromId, string? toId, 
+            Guid chatId, string content, DateTime creationTimeStamp, List<InvectysMedia> files, 
+            string displayName, InvectysMedia displayMedia)
         {
             Id = id;
             ToId = toId;
@@ -18,6 +20,8 @@ namespace UserCommunicationService.Core.Services.Messages.MessagesModels
             ChatId = chatId;
             CreationTimeStamp = creationTimeStamp;
             Files = files;
+            DisplayMedia = displayMedia;
+            DisplayName = displayName;
         }
 
         public Guid Id { get; }
@@ -27,5 +31,7 @@ namespace UserCommunicationService.Core.Services.Messages.MessagesModels
         public string Content { get; }
         public List<InvectysMedia> Files { get; }
         public DateTime CreationTimeStamp { get; }
+        public string DisplayName { get; set; }
+        public InvectysMedia DisplayMedia { get; set; }
     }
 }

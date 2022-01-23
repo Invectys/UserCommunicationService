@@ -1,4 +1,5 @@
 ﻿using Invectys.media;
+using Invectys.UsersService.Client.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using UserCommunicationService.Controllers.MessagesModels;
@@ -128,7 +129,10 @@ namespace UserCommunicationService.Hubs
             // increase notifications counter (not read messages)
             await _chatsService.IncrementNotificationsCounter(chatId, coreModel.FromId);
 
-            var receiveMessage = new ReceiveMessage(coreModel.ToReceiveMessageCore(guid));
+            var response = await _usersService.UsersServiceApi.FetchUser(new FetchUserInput(input.FromId));
+            var fromUser = response.User!;
+
+            var receiveMessage = new ReceiveMessage(coreModel.ToReceiveMessageCore(guid, fromUser.Nickname, fromUser.Avatar));
             await Clients.Group(chatId.ToString()).SendAsync(HubMethodsNames.NewMessageName, receiveMessage);
             
 
