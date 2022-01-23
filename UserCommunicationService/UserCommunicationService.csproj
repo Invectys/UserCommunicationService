@@ -16,4 +16,8 @@
     <ProjectReference Include="..\UserCommunicationService.Core\UserCommunicationService.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Pages\Models\" />
+  </ItemGroup>
+
 </Project>

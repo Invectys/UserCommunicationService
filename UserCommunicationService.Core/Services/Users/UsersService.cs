@@ -20,6 +20,10 @@ namespace UserCommunicationService.Core.Services
         public const string Audience = ProjectId;
         public const string Issuer = "https://securetoken.google.com/" + ProjectId;
 
+
+        public UsersServiceApi UsersServiceApi { get => _usersServcieApi; set { _usersServcieApi = value;  } }
+
+
         private UsersServiceApi _usersServcieApi;
 
         public async Task<UserCore[]> FetchUsers(string[] userIds)

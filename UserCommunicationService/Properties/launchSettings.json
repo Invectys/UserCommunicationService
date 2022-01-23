@@ -10,6 +10,7 @@
   "profiles": {
     "UserCommunicationService": {
       "commandName": "Project",
+      "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "GOOGLE_APPLICATION_CREDENTIALS": "C:\\Users\\qzwse\\tusanetworkv3-d6b52c01369c.json"

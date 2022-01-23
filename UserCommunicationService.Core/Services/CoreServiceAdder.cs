@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using UserCommunicationService.Core.Services.Chats;
+using UserCommunicationService.Core.Services.Configuration;
 using UserCommunicationService.Core.Services.Messages;
 using UserCommunicationService.Core.Services.Users;
 using UserCommunicationService.database;
@@ -17,6 +18,7 @@ namespace UserCommunicationService.Core.Services
 
             collection.AddSingleton<IMessagesService, MessagesService>();
             collection.AddSingleton<IChatsService, ChatsService>();
+            collection.AddSingleton<AppConfigurationService>();
         }
     }
 }
