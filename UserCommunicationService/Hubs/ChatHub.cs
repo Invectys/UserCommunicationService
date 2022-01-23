@@ -96,7 +96,7 @@ namespace UserCommunicationService.Hubs
             var rows = new List<UserToChatDatabase>();
             foreach (var item in input.Users)
             {
-                var row = new UserToChatDatabase(item, chatId, banned: false, notificationsEnabled: true, chatName: input.ChatName, role: Roles.User, avatar: new InvectysMedia(isAsset: true, mediaId: "DEFAULT", type: InvectysMedia.ImageType));
+                var row = new UserToChatDatabase(item, chatId, banned: false, notificationsEnabled: true, chatName: input.ChatName, role: Roles.User, avatar: new InvectysMedia(isAsset: true, mediaId: "assets/default.png", type: InvectysMedia.ImageType));
                 rows.Add(row);
                 // add users to chat notifications group
                 await HandleAddUserToChatNotifications(row);
@@ -110,7 +110,7 @@ namespace UserCommunicationService.Hubs
         {
             var row = new UserToChatDatabase(userId: input.UserId, chatId: input.ChatId, 
                 banned: false, notificationsEnabled: false, chatName: input.ChatName, role: Roles.User,
-                avatar: new InvectysMedia(isAsset: true, mediaId: "DEFAULT", type: InvectysMedia.ImageType));
+                avatar: new InvectysMedia(isAsset: true, mediaId: "assets/default.png", type: InvectysMedia.ImageType));
             var list = new List<UserToChatDatabase>() { row };
             await _chatsService.AddUsersToChat(list);
 
