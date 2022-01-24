@@ -97,7 +97,9 @@ namespace UserCommunicationService.Hubs
             var rows = new List<UserToChatDatabase>();
             foreach (var item in input.Users)
             {
-                var row = new UserToChatDatabase(item, chatId, banned: false, notificationsEnabled: true, chatName: input.ChatName, role: Roles.User, avatar: new InvectysMedia(isAsset: true, mediaId: "assets/default.png", type: InvectysMedia.ImageType));
+                var row = new UserToChatDatabase(item, chatId, banned: false, notificationsEnabled: true, chatName: input.ChatName, role: Roles.User, 
+                    avatar: new InvectysMedia(isAsset: true, mediaId: "assets/default.png", 
+                    type: InvectysMedia.ImageType, creationTime: DateTime.Now, tag: "", cropLeft: 0, cropRight: 0, cropTop: 0, cropBottom: 0));
                 rows.Add(row);
                 // add users to chat notifications group
                 await HandleAddUserToChatNotifications(row);
@@ -111,7 +113,8 @@ namespace UserCommunicationService.Hubs
         {
             var row = new UserToChatDatabase(userId: input.UserId, chatId: input.ChatId, 
                 banned: false, notificationsEnabled: false, chatName: input.ChatName, role: Roles.User,
-                avatar: new InvectysMedia(isAsset: true, mediaId: "assets/default.png", type: InvectysMedia.ImageType));
+                avatar: new InvectysMedia(isAsset: true, mediaId: "assets/default.png",
+                type: InvectysMedia.ImageType, creationTime: DateTime.Now, tag: "", cropLeft: 0, cropRight: 0, cropTop: 0, cropBottom: 0));
             var list = new List<UserToChatDatabase>() { row };
             await _chatsService.AddUsersToChat(list);
 
@@ -132,7 +135,7 @@ namespace UserCommunicationService.Hubs
             var response = await _usersService.UsersServiceApi.FetchUser(new FetchUserInput(input.FromId));
             var fromUser = response.User!;
 
-            var receiveMessage = new ReceiveMessage(coreModel.ToReceiveMessageCore(guid, fromUser.Nickname, fromUser.Avatar));
+            var receiveMessage = new ReceiveMessage(coreModel.ToReceiveMessageCore(guid, fromUser.Nickname, fromUser.Avatar.Last()));
             await Clients.Group(chatId.ToString()).SendAsync(HubMethodsNames.NewMessageName, receiveMessage);
             
 

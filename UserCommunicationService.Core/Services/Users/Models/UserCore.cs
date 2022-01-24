@@ -24,7 +24,7 @@ namespace UserCommunicationService.Core.Services.Users.Models
             MessageDisplayName = fromUsersServiceUser.Nickname;
             PhoneNumber = "hiden";
             UserId = fromUsersServiceUser.Id;
-            Avatar = fromUsersServiceUser.Avatar;
+            Avatar = fromUsersServiceUser.Avatar.Last();
         }
 
 
