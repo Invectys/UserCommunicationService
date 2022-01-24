@@ -64,6 +64,12 @@ namespace UserCommunicationService.database
                     .Map(a => a.Type, "type")
                     .Map(a => a.MediaId, "mediaid")
                     .Map(a => a.IsAsset, "isasset")
+                    .Map(a => a.CreationTime, "creationtime")
+                    .Map(a => a.Tag, "tag")
+                    .Map(a => a.CropTop, "croptop")
+                    .Map(a => a.CropBottom, "cropbottom")
+                    .Map(a => a.CropLeft, "cropleft")
+                    .Map(a => a.CropRight, "cropright")
             );
 
             // User to user messages table creation
