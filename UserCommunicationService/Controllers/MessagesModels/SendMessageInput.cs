@@ -21,7 +21,7 @@ namespace UserCommunicationService.Controllers.MessagesModels
         public string Content { get; }
         public List<InvectysMedia> Files { get; set; }
 
-        public SendMessageInputCore ToCoreModel(DateTime creationTimeStamp)
+        public SendMessageInputCore ToCoreModel(DateTimeOffset creationTimeStamp)
         {
             return new SendMessageInputCore(chatId: ChatId, toId: ToId, fromId: FromId, content: Content, creationTimeStamp: creationTimeStamp, files: Files);
         }

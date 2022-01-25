@@ -112,10 +112,7 @@ namespace UserCommunicationClient
             {
                 Console.WriteLine("fetched messages Chat = " + output.ChatId);
                 PagingStates[output.ChatId.ToString() + "-messages"] = output.PagingState;
-                foreach (var item in output.Messages)
-                {
-                    Console.WriteLine($"{item.CreationTimeStamp.ToShortTimeString()} from={item.FromId}: {item.Content}");
-                }
+               
             });
 
             _connection.On<FetchChatsOutput>("FetchingChats", (output) =>

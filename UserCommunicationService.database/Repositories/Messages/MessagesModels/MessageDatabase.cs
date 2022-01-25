@@ -23,7 +23,7 @@ namespace UserCommunicationService.database.Repositories.Messages.MessagesModels
             string? toId, 
             Guid chatId, 
             string content,
-            DateTime creationTimeStamp,
+            DateTimeOffset creationTimeStamp,
             List<InvectysMedia> files
             )
         {
@@ -42,7 +42,7 @@ namespace UserCommunicationService.database.Repositories.Messages.MessagesModels
         public string? ToId { get; set; }
         public Guid ChatId { get; set; }
         public string Content { get; set; }
-        public DateTime CreationTimeStamp { get; set; }
+        public DateTimeOffset CreationTimeStamp { get; set; }
         public List<InvectysMedia> Files { get; set; }
     }
 }

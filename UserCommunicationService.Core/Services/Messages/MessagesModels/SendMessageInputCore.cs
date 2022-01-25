@@ -6,7 +6,7 @@ namespace UserCommunicationService.Core.Services.MessagesModels
 {
     public class SendMessageInputCore
     {
-        public SendMessageInputCore(string fromId, string? toId, Guid chatId, string content, DateTime creationTimeStamp, List<InvectysMedia> files)
+        public SendMessageInputCore(string fromId, string? toId, Guid chatId, string content, DateTimeOffset creationTimeStamp, List<InvectysMedia> files)
         {
             ToId = toId;
             FromId = fromId;
@@ -22,7 +22,7 @@ namespace UserCommunicationService.Core.Services.MessagesModels
         public Guid ChatId { get; }
         public string Content { get; }
         public List<InvectysMedia> Files { get; set; }
-        public DateTime CreationTimeStamp { get; }
+        public DateTimeOffset CreationTimeStamp { get; }
 
 
         public MessageDatabase ToDatabase(Guid guid)

@@ -10,7 +10,7 @@ namespace UserCommunicationService.Core.Services.Messages.MessagesModels
     public class ReceiveMessageCore
     {
         public ReceiveMessageCore(Guid id, string fromId, string? toId, 
-            Guid chatId, string content, DateTime creationTimeStamp, List<InvectysMedia> files, 
+            Guid chatId, string content, DateTimeOffset creationTimeStamp, List<InvectysMedia> files, 
             string displayName, InvectysMedia displayMedia)
         {
             Id = id;
@@ -30,7 +30,7 @@ namespace UserCommunicationService.Core.Services.Messages.MessagesModels
         public Guid ChatId { get; }
         public string Content { get; }
         public List<InvectysMedia> Files { get; }
-        public DateTime CreationTimeStamp { get; }
+        public DateTimeOffset CreationTimeStamp { get; }
         public string DisplayName { get; set; }
         public InvectysMedia DisplayMedia { get; set; }
     }

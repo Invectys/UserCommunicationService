@@ -14,7 +14,7 @@ namespace UserCommunicationClient.api
             string? toId,
             Guid chatId,
             string content,
-            DateTime creationTimeStamp
+            DateTimeOffset creationTimeStamp
         )
         {
             ToId = toId;
@@ -31,6 +31,6 @@ namespace UserCommunicationClient.api
         public string? ToId { get; }
         public Guid ChatId { get; }
         public string Content { get; }
-        public DateTime CreationTimeStamp { get; }
+        public DateTimeOffset CreationTimeStamp { get; }
     }
 }

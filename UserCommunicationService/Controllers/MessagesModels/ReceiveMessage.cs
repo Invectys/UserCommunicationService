@@ -6,7 +6,7 @@ namespace UserCommunicationService.Controllers.MessagesModels
     public class ReceiveMessage
     {
         public ReceiveMessage(Guid id, string fromId, string? toId, 
-            Guid chatId, string content, DateTime creationTimeStamp, 
+            Guid chatId, string content, DateTimeOffset creationTimeStamp, 
             List<InvectysMedia> files, string displayName, InvectysMedia displayMedia)
         {
             Id = id;

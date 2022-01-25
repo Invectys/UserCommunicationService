@@ -123,7 +123,7 @@ namespace UserCommunicationService.Hubs
 
         public async Task SendMessage(SendMessageInput input)
         {
-            var coreModel = input.ToCoreModel(DateTime.Now);
+            var coreModel = input.ToCoreModel(DateTimeOffset.Now);
             var chatId = coreModel.ChatId;
 
             // save to database 
