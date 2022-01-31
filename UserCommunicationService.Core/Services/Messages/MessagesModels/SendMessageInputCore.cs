@@ -6,7 +6,9 @@ namespace UserCommunicationService.Core.Services.MessagesModels
 {
     public class SendMessageInputCore
     {
-        public SendMessageInputCore(string fromId, string? toId, Guid chatId, string content, DateTimeOffset creationTimeStamp, List<InvectysMedia> files)
+        public SendMessageInputCore(string fromId, string? toId, 
+            Guid chatId, string content, DateTimeOffset creationTimeStamp, 
+            List<InvectysMedia> files, Guid preAddedId)
         {
             ToId = toId;
             FromId = fromId;
@@ -14,6 +16,7 @@ namespace UserCommunicationService.Core.Services.MessagesModels
             CreationTimeStamp = creationTimeStamp;
             ChatId = chatId;
             Files = files;
+            PreAddedId = preAddedId;
         }
 
 
@@ -23,9 +26,10 @@ namespace UserCommunicationService.Core.Services.MessagesModels
         public string Content { get; }
         public List<InvectysMedia> Files { get; set; }
         public DateTimeOffset CreationTimeStamp { get; }
+        public Guid PreAddedId { get; set; }
 
 
-        public MessageDatabase ToDatabase(Guid guid)
+        public MessageDatabase ToDatabase(Guid guid, string sendingStatus)
         {
             return new MessageDatabase(
                 id: guid, 
@@ -34,15 +38,26 @@ namespace UserCommunicationService.Core.Services.MessagesModels
                 chatId: ChatId, 
                 content: Content,
                 creationTimeStamp: CreationTimeStamp,
-                files: Files
+                files: Files,
+                preAddedId: PreAddedId,
+                sendingStatus: sendingStatus
             );
         }
 
-        public ReceiveMessageCore ToReceiveMessageCore(Guid guid, string displayName, InvectysMedia media)
+        public ReceiveMessageCore ToReceiveMessageCore(Guid guid, string displayName, string sendingStatus, InvectysMedia media)
         {
-            return new ReceiveMessageCore(id: guid, 
-                chatId: ChatId, toId: ToId, fromId: FromId,
-                content: Content, creationTimeStamp: CreationTimeStamp, files: Files, displayName: displayName, displayMedia: media);
+            return new ReceiveMessageCore(
+                id: guid, 
+                chatId: ChatId, 
+                toId: ToId, fromId: FromId,
+                content: Content,
+                creationTimeStamp: CreationTimeStamp, 
+                files: Files, 
+                displayName: displayName, 
+                displayMedia: media,
+                preAddedId: PreAddedId,
+                sendingStatus: sendingStatus
+            );
         }
     }
 }

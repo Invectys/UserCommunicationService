@@ -12,9 +12,14 @@ namespace UserCommunicationService.database.CQL
             $"{UserToChatDatabaseColumnNames.ChatName}, " +
             $"{UserToChatDatabaseColumnNames.Role}, " +
             $"{UserToChatDatabaseColumnNames.Avatar}, " +
+            $"{UserToChatDatabaseColumnNames.Background}, " +
+            $"{UserToChatDatabaseColumnNames.Pinned}, " +
+            $"{UserToChatDatabaseColumnNames.ViewHeight}, " +
+            $"{UserToChatDatabaseColumnNames.FontSize}, " +
+            $"{UserToChatDatabaseColumnNames.BorderRadius}, " +
             $"{UserToChatDatabaseColumnNames.ChatId}) ";
 
-        public readonly static string InsertPreparRowQuery = $"INSERT INTO {Constants.UserToChatTableName} {valueBloc} VALUES (?, ?, ?, ?, ?, ?, ?);";
+        public readonly static string InsertPreparRowQuery = $"INSERT INTO {Constants.UserToChatTableName} {valueBloc} VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
         public static string GetUpdateUserToChatByUser(string userId, string chatId)
         {
@@ -35,7 +40,20 @@ namespace UserCommunicationService.database.CQL
 
         public static BoundStatement BindInsertUserToChat(UserToChatDatabase row, PreparedStatement insert)
         {
-            return insert.Bind(row.UserId, row.Banned, row.NotificationsEnabled, row.ChatName, row.Role, row.Avatar, row.ChatId);
+            return insert.Bind(
+                row.UserId, 
+                row.Banned, 
+                row.NotificationsEnabled,
+                row.ChatName, 
+                row.Role, 
+                row.Avatar,
+                row.Background, 
+                row.Pinned, 
+                row.ViewHeight,
+                row.FontSize,
+                row.BorderRadius,
+                row.ChatId
+            );
         }
     }
 }

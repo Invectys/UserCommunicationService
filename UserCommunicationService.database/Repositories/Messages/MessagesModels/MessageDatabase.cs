@@ -24,7 +24,9 @@ namespace UserCommunicationService.database.Repositories.Messages.MessagesModels
             Guid chatId, 
             string content,
             DateTimeOffset creationTimeStamp,
-            List<InvectysMedia> files
+            List<InvectysMedia> files,
+            Guid preAddedId,
+            string sendingStatus
             )
         {
             ToId = toId;
@@ -34,6 +36,8 @@ namespace UserCommunicationService.database.Repositories.Messages.MessagesModels
             ChatId = chatId;
             Id = id;
             Files = files;
+            PreAddedId = preAddedId;
+            SendingStatus = sendingStatus;
         }
 
 
@@ -44,5 +48,7 @@ namespace UserCommunicationService.database.Repositories.Messages.MessagesModels
         public string Content { get; set; }
         public DateTimeOffset CreationTimeStamp { get; set; }
         public List<InvectysMedia> Files { get; set; }
+        public Guid PreAddedId { get; set; }
+        public string SendingStatus { get; set; }
     }
 }

@@ -68,16 +68,56 @@ namespace UserCommunicationService.Hubs
             var chatId = Guid.NewGuid();
 
             var avatar1 = secondUser.Avatar;
-            var row1 = new UserToChatDatabase(userId: firstUserId, 
-                chatId: chatId, banned: false, 
-                chatName: secondUser.PrivateChatNameWithThisUser, role: Roles.User, notificationsEnabled: true, 
-                avatar: avatar1);
+            var row1 = new UserToChatDatabase(
+                userId: firstUserId, 
+                chatId: chatId, 
+                banned: false, 
+                chatName: secondUser.PrivateChatNameWithThisUser, 
+                role: Roles.User, 
+                notificationsEnabled: true, 
+                avatar: avatar1,
+                background: new InvectysMedia(
+                    isAsset: true,
+                    mediaId: "DEFAULT_BACKGROUND",
+                    type: InvectysMedia.ImageType,
+                    creationTime: DateTime.Now,
+                    tag: "",
+                    cropLeft: 0,
+                    cropRight: 0,
+                    cropTop: 0,
+                    cropBottom: 0
+                ),
+                pinned: false,
+                borderRadius: 15,
+                viewHeight: -1,
+                fontSize: 20
+            );
 
             var avatar2 = firstUser.Avatar;
-            var row2 = new UserToChatDatabase(userId: secondUserId, 
-                chatId: chatId, banned: false, 
-                chatName: firstUser.PrivateChatNameWithThisUser, role: Roles.User, 
-                notificationsEnabled: true, avatar: avatar2);
+            var row2 = new UserToChatDatabase(
+                userId: secondUserId, 
+                chatId: chatId, 
+                banned: false, 
+                chatName: firstUser.PrivateChatNameWithThisUser, 
+                role: Roles.User, 
+                notificationsEnabled: true,
+                avatar: avatar2,
+                background: new InvectysMedia(
+                    isAsset: true,
+                    mediaId: "DEFAULT_BACKGROUND",
+                    type: InvectysMedia.ImageType,
+                    creationTime: DateTime.Now,
+                    tag: "",
+                    cropLeft: 0,
+                    cropRight: 0,
+                    cropTop: 0,
+                    cropBottom: 0
+                ),
+                pinned: false,
+                borderRadius: 15,
+                viewHeight: -1,
+                fontSize: 20
+            );
 
             // save to database
             var list = new List<UserToChatDatabase>() { row1, row2 };
@@ -97,9 +137,40 @@ namespace UserCommunicationService.Hubs
             var rows = new List<UserToChatDatabase>();
             foreach (var item in input.Users)
             {
-                var row = new UserToChatDatabase(item, chatId, banned: false, notificationsEnabled: true, chatName: input.ChatName, role: Roles.User, 
-                    avatar: new InvectysMedia(isAsset: true, mediaId: "assets/default.png", 
-                    type: InvectysMedia.ImageType, creationTime: DateTime.Now, tag: "", cropLeft: 0, cropRight: 0, cropTop: 0, cropBottom: 0));
+                var row = new UserToChatDatabase(
+                    item, 
+                    chatId, 
+                    banned: false,
+                    notificationsEnabled: true, 
+                    chatName: input.ChatName, 
+                    role: Roles.User, 
+                    avatar: new InvectysMedia(
+                        isAsset: true, 
+                        mediaId: "DEFAULT", 
+                        type: InvectysMedia.ImageType, 
+                        creationTime: DateTime.Now,
+                        tag: "",
+                        cropLeft: 0, 
+                        cropRight: 0,
+                        cropTop: 0,
+                        cropBottom: 0
+                    ),
+                    background: new InvectysMedia(
+                        isAsset: true,
+                        mediaId: "DEFAULT_BACKGROUND",
+                        type: InvectysMedia.ImageType,
+                        creationTime: DateTime.Now,
+                        tag: "",
+                        cropLeft: 0,
+                        cropRight: 0,
+                        cropTop: 0,
+                        cropBottom: 0
+                    ),
+                    pinned: false,
+                    borderRadius: 15,
+                    viewHeight: -1,
+                    fontSize: 20
+                );
                 rows.Add(row);
                 // add users to chat notifications group
                 await HandleAddUserToChatNotifications(row);
@@ -111,10 +182,40 @@ namespace UserCommunicationService.Hubs
 
         public async Task AddUserToChat(AddUserToChatInput input)
         {
-            var row = new UserToChatDatabase(userId: input.UserId, chatId: input.ChatId, 
-                banned: false, notificationsEnabled: false, chatName: input.ChatName, role: Roles.User,
-                avatar: new InvectysMedia(isAsset: true, mediaId: "assets/default.png",
-                type: InvectysMedia.ImageType, creationTime: DateTime.Now, tag: "", cropLeft: 0, cropRight: 0, cropTop: 0, cropBottom: 0));
+            var row = new UserToChatDatabase(
+                userId: input.UserId,
+                chatId: input.ChatId,
+                banned: false,
+                notificationsEnabled: false,
+                chatName: input.ChatName,
+                role: Roles.User,
+                avatar: new InvectysMedia(
+                    isAsset: true,
+                    mediaId: "DEFAULT",
+                    type: InvectysMedia.ImageType,
+                    creationTime: DateTime.Now,
+                    tag: "",
+                    cropLeft: 0,
+                    cropRight: 0,
+                    cropTop: 0,
+                    cropBottom: 0
+                ),
+                background: new InvectysMedia(
+                    isAsset: true,
+                    mediaId: "DEFAULT_BACKGROUND",
+                    type: InvectysMedia.ImageType,
+                    creationTime: DateTime.Now,
+                    tag: "",
+                    cropLeft: 0,
+                    cropRight: 0,
+                    cropTop: 0,
+                    cropBottom: 0
+                ),
+                fontSize: 20,
+                borderRadius: 15,
+                pinned: false,
+                viewHeight: -1
+            );
             var list = new List<UserToChatDatabase>() { row };
             await _chatsService.AddUsersToChat(list);
 
@@ -135,7 +236,13 @@ namespace UserCommunicationService.Hubs
             var response = await _usersService.UsersServiceApi.FetchUser(new FetchUserInput(input.FromId));
             var fromUser = response.User!;
 
-            var receiveMessage = new ReceiveMessage(coreModel.ToReceiveMessageCore(guid, fromUser.Nickname, fromUser.Avatar.Last()));
+            var receiveMessage = new ReceiveMessage(coreModel.ToReceiveMessageCore(
+                    guid, 
+                    fromUser.Nickname, 
+                    MessageSenginsStatuses.MessageSent,
+                    fromUser.Avatar.Last()
+                )
+            );
             await Clients.Group(chatId.ToString()).SendAsync(HubMethodsNames.NewMessageName, receiveMessage);
             
 

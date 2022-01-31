@@ -15,5 +15,7 @@ namespace UserCommunicationService.database.CQL
         public static string ContentName = "content";
         public static string CreationTimestampName = "creationtimestamp";
         public static string FilesName = "files";
+        public static string PreAddedIdName = "preaddedid";
+        public static string SendingStatusName = "sendingstatus";
     }
 }

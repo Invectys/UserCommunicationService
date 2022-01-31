@@ -22,7 +22,7 @@ namespace UserCommunicationService.Core.Services.Messages
         public async Task<Guid> SaveMessage(SendMessageInputCore input)
         {
             var id = Guid.NewGuid();
-            var sendMessageDatabase = input.ToDatabase(id);
+            var sendMessageDatabase = input.ToDatabase(id, "SENT");
             await _repository.SaveMessage(sendMessageDatabase);
             return id;
         }

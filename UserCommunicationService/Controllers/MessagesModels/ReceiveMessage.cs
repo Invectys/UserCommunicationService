@@ -7,7 +7,9 @@ namespace UserCommunicationService.Controllers.MessagesModels
     {
         public ReceiveMessage(Guid id, string fromId, string? toId, 
             Guid chatId, string content, DateTimeOffset creationTimeStamp, 
-            List<InvectysMedia> files, string displayName, InvectysMedia displayMedia)
+            List<InvectysMedia> files, string displayName, InvectysMedia displayMedia,
+            Guid preAddedId, string sendingStatus
+            )
         {
             Id = id;
             ToId = toId;
@@ -18,15 +20,26 @@ namespace UserCommunicationService.Controllers.MessagesModels
             Files = files;
             DisplayMedia = displayMedia;
             DisplayName = displayName;
+            PreAddedId = preAddedId;
+            SendingStatus = sendingStatus;
         }
 
         public ReceiveMessage(ReceiveMessageCore core) : this(
-            id: core.Id, fromId: core.FromId, toId: core.ToId, 
-            chatId: core.ChatId, content: core.Content, 
-            creationTimeStamp: core.CreationTimeStamp, files: core.Files, 
-            displayMedia: core.DisplayMedia, displayName: core.DisplayName)
+                id: core.Id, 
+                fromId: core.FromId, 
+                toId: core.ToId, 
+                chatId: core.ChatId, 
+                content: core.Content, 
+                creationTimeStamp: core.CreationTimeStamp, 
+                files: core.Files, 
+                displayMedia: core.DisplayMedia, 
+                displayName: core.DisplayName,
+                sendingStatus: core.SendingStatus, 
+                preAddedId: core.PreAddedId
+            )
         {
         }
+
 
         public Guid Id { get; }
         public string FromId { get; }
@@ -37,6 +50,7 @@ namespace UserCommunicationService.Controllers.MessagesModels
         public DateTimeOffset CreationTimeStamp { get; }
         public string DisplayName { get; set; }
         public InvectysMedia DisplayMedia { get; set; }
-
+        public Guid PreAddedId { get; set; }
+        public string SendingStatus { get; set; }
     }
 }

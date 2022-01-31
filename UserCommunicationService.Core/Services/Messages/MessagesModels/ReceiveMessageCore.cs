@@ -11,7 +11,7 @@ namespace UserCommunicationService.Core.Services.Messages.MessagesModels
     {
         public ReceiveMessageCore(Guid id, string fromId, string? toId, 
             Guid chatId, string content, DateTimeOffset creationTimeStamp, List<InvectysMedia> files, 
-            string displayName, InvectysMedia displayMedia)
+            string displayName, InvectysMedia displayMedia, Guid preAddedId, string sendingStatus)
         {
             Id = id;
             ToId = toId;
@@ -22,6 +22,8 @@ namespace UserCommunicationService.Core.Services.Messages.MessagesModels
             Files = files;
             DisplayMedia = displayMedia;
             DisplayName = displayName;
+            PreAddedId = preAddedId;
+            SendingStatus = sendingStatus;
         }
 
         public Guid Id { get; }
@@ -33,5 +35,7 @@ namespace UserCommunicationService.Core.Services.Messages.MessagesModels
         public DateTimeOffset CreationTimeStamp { get; }
         public string DisplayName { get; set; }
         public InvectysMedia DisplayMedia { get; set; }
+        public Guid PreAddedId { get; set; }
+        public string SendingStatus { get; set; }
     }
 }
